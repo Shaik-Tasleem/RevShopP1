@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard</title>
+    <style>
+        
+header {
+    background-color: #333;
+    padding: 10px 0; /* Top and bottom padding */
+    border-radius: 0 0 20px 20px; /* Rounded corners on bottom */
+    width: 100%;
+    position: fixed; /* Fixed at the top */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure it stays on top of other content */
+}
+
+.logo img {
+    width: 50px; /* Set the width of the image */
+    height: 50px; /* Set the height of the image */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image covers the container */
+    margin-right: 5px;
+    margin-left: 30px /* Space between the logo and other nav items */
+}
+
+
+input[type="text"]::placeholder {
+    color: #aaa; /* Color for the placeholder text */
+}
+
+/* Navigation */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+nav ul li {
+    color: #fff; /* White text for navigation links */
+}
+
+/* Buttons */
+.account-icon, .cart-icon {
+    background: #fbfbfb; /* Light grey background */
+    color: #000000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.account-icon:hover, .cart-icon:hover {
+    background: #865f1896; /* Darker grey on hover */
+}
+
+.cart-icon img, .account-icon img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Dropdown Menu Styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Slight shadow for dropdown */
+    border-radius: 80px;
+    padding: 10px 0;
+    min-width: 200px;
+    right: 0;
+    z-index: 1;
+}
+
+.dropdown-menu li {
+    list-style: none;
+}
+
+.dropdown-menu li a {
+    color: #333;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.dropdown-menu li a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Profile and Cart buttons container */
+.account-cart {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Hover effect for profile and cart */
+.account-cart button:hover {
+    background-color: #f0f0f0; /* Slightly lighter background on hover */
+    transition: background-color 0.3s ease;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.dashboard-container {
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Carousel wrapper to hold both the category container and navigation buttons */
+.carousel-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Category container with overflow hidden to create animation */
+.category-container {
+    width: 90%;
+    max-width: 1000px;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.category-carousel {
+    display: flex;
+    transition: transform 0s ease-in-out;
+}
+
+.category-carousel a {
+    margin: 0 15px;
+}
+
+.category-carousel img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.category-carousel img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Navigation button styling */
+.nav-btn {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 30px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+    z-index: 10;
+}
+
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px; /* Space between nav items */
+}
+
+.navbar li {
+    margin: 0;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+
+.nav-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.left-btn {
+    left: 10px;
+}
+
+.right-btn {
+    right: 10px;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .category-carousel img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-carousel img {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><img src="http://127.0.0.1:5500/images/revshop-logo.png"><span></span></div>
+        
+            <nav class="navbar">
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="manageProducts.html">Product Management</a></li>
+                    <li><a href="orders.html">Orders</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="logout.html">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+    
+    <div class="dashboard-container">
+        <h1>Choose a Category to Add Products</h1>
+        <div class="carousel-wrapper">
+            <button class="nav-btn left-btn" id="leftBtn">&#10094;</button>
+            <div class="category-container">
+                <div class="category-carousel" id="categoryCarousel">
+                    <a href="addProductForm.html"><img src="https://5.imimg.com/data5/SELLER/Default/2024/5/420464956/TG/PX/IW/222515528/apple-iphone-15-128-gb-pink-250x250.jpg" alt="SmartPhones"></a>
+                    <a href="addProductForm.html"><img src="https://static-ecapac.acer.com/media/wysiwyg/Desktop-Banner_640x720_2_1.jpg" alt="Laptops"></a>
+                    <a href="addProductForm.html"><img src="https://5.imimg.com/data5/SELLER/Default/2023/10/354886967/TI/DF/AE/100983625/tshirt-maroon-png-500x500.png" alt="T-shirts"></a>
+                    <a href="addProductForm.html"><img src="https://static.wixstatic.com/media/8f92dc_7034699e0d1b4c8e847f50101611b90f~mv2.jpg/v1/fill/w_320,h_320,q_90/8f92dc_7034699e0d1b4c8e847f50101611b90f~mv2.jpg" alt="Ear Buds"></a>
+                    <a href="addProductForm.html"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb-whPXEqeo89Ogjs6UM35Q1mKsh1oUnntOQ&s" alt="Camera"></a>
+                    <a href="addProductForm.html"><img src="https://www.cnet.com/a/img/resize/af7a1129318b00fa6386dc1731cd14b09dc21eb8/hub/2023/10/02/a2702f0c-5206-4306-8fd2-ee703fe93259/pyxel.jpg?auto=webp&fit=crop&height=1200&width=1200" alt="Toys"></a>
+                    <a href="addProductForm.html"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRla8erNGY2vUNsn9XyHiRQ0ri686Y3BMXkXA&s" alt="Books"></a>
+                    <a href="addProductForm.html"><img src="https://rukminim2.flixcart.com/image/720/864/kzegk280/television/n/f/l/-original-imagbfa5afwchyue.jpeg?q=60&crop=false" alt="TV"></a>
+                    <a href="addProductForm.html"><img src="https://media3.bsh-group.com/Images/450x/19425132_Siemens_Home_Appliances_Brand_Reshape_Laundry_Care_Washin_Machines_Mobile_Stage_9_16.jpg" alt="WashingMachine"></a>
+                    <a href="addProductForm.html"><img src="https://images.samsung.com/is/image/samsung/assets/in/AR18CY5AMWK_296x352.jpg?$296_352_JPG$" alt="AC"></a>
+                    <a href="addProductForm.html"><img src="https://www.siatex.com/wp-content/uploads/2024/02/Hoodies-Manufacturer-in-Bangladesh-550x550.jpeg.webp" alt="Hoodies"></a>
+                    <a href="addProductForm.html"><img src="https://images.meesho.com/images/products/142481028/0hhnj_512.webp" alt="Pants"></a>
+                    <a href="addProductForm.html"><img src="https://www.jiomart.com/images/product/original/rvngltiopt/baleshwar-man-s-solid-slim-fit-casual-shirt-for-men-shirts-bl-xxl-product-images-rvngltiopt-0-202303061154.jpg?im=Resize=(500,630)" alt="Shirts"></a>
+                    <a href="addProductForm.html"><img src="https://images-cdn.ubuy.co.in/6356b3a5c2926a7d140892e4-a-beautiful-high-quality-living-room.jpg" alt="furniture"></a>
+                    <a href="addProductForm.html"><img src="https://media.cnn.com/api/v1/images/stellar/prod/i-stock-1287493837-1.jpg?q=h_1194,w_2121,x_0,y_0" alt="Videogames"></a>
+                    <a href="addProductForm.html"><img src="https://m.media-amazon.com/images/I/81aUa3LrDzL._AC_UY1100_.jpg" alt="jewellery"></a>
+                    <a href="addProductForm.html"><img src="https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/14617690/2022/6/30/ee3b4815-2b64-45f9-8045-04b9a99778c01656562021621-Power-Men-Grey-Leather-Road-Running-Non-Marking-Shoes-320165-1.jpg" alt="footwear"></a>
+                    <a href="addProductForm.html"><img src="https://www.keckmedicine.org/wp-content/uploads/2021/11/Household-cleaning-products.jpg" alt="household"></a>
+                    <a href="addProductForm.html"><img src="https://mirchi.com/os/cdn/content/images/Assorted%20Flavoured%20Chocolate%20Pack%2020%20Variety%20Chocolate%20Venue_medium870241.webp" alt="Chocolates"></a>
+                    <a href="addProductForm.html"><img src="https://www.trustedreviews.com/wp-content/uploads/sites/54/2022/07/Canon_PIXMA_G650_front_side-scaled.jpg" alt="Printers"></a>
+                    <a href="addProductForm.html"><img src="https://m.media-amazon.com/images/I/81BLNUV2YQL.jpg" alt="Mobile Accessories"></a>
+                    <a href="addProductForm.html"><img src="https://3.imimg.com/data3/RL/MQ/MY-11123085/musical-instrument-sales-and-service-500x500.jpg" alt="Musical Instruments"></a>
+                    <a href="addProductForm.html"><img src="https://imgk.timesnownews.com/media/TVS_Raider_profile.jpg" alt="Bikes"></a>
+                    <a href="addProductForm.html"><img src="https://m.media-amazon.com/images/I/71mDwwqFHLL._AC_UF1000,1000_QL80_.jpg" alt="Water Bottles"></a>
+                    <a href="addProductForm.html"><img src="https://www.nalli.com/media/catalog/product/n/s/ns4440558_m.jpg" alt="Sarees"></a>
+                </div>
+            </div>
+            <button class="nav-btn right-btn" id="rightBtn">&#10095;</button>
+        </div>
+    </div>
+
+    <script >
+
+const leftBtn = document.getElementById('leftBtn');
+const rightBtn = document.getElementById('rightBtn');
+const categoryCarousel = document.getElementById('categoryCarousel');
+
+// Variables to control the scroll amount
+let scrollAmount = 0;
+const scrollStep = 200; // Distance to scroll per button click
+const scrollInterval = 10; // Auto-scroll speed (lower means faster)
+const resumeDelay = 2000; // Delay in milliseconds before resuming auto-scroll
+let autoScrollTimer;
+
+// Function to start auto-scrolling
+function startAutoScroll() {
+    // Ensure we don't set multiple intervals
+    if (autoScrollTimer) {
+        clearInterval(autoScrollTimer);
+    }
+    autoScrollTimer = setInterval(() => {
+        const maxScroll = categoryCarousel.scrollWidth - categoryCarousel.clientWidth;
+        scrollAmount = (scrollAmount + 1) % maxScroll;
+        categoryCarousel.style.transform = `translateX(-${scrollAmount}px)`;
+    }, scrollInterval);
+}
+
+// Function to stop auto-scrolling
+function stopAutoScroll() {
+    clearInterval(autoScrollTimer);
+}
+
+// Function to move the carousel to the left
+leftBtn.addEventListener('click', () => {
+    stopAutoScroll(); // Pause auto-scroll on manual navigation
+    scrollAmount = Math.max(scrollAmount - scrollStep, 0);
+    categoryCarousel.style.transform = `translateX(-${scrollAmount}px)`;
+    setTimeout(() => {
+        startAutoScroll(); // Resume auto-scroll after a delay
+    }, resumeDelay);
+});
+
+// Function to move the carousel to the right
+rightBtn.addEventListener('click', () => {
+    stopAutoScroll(); // Pause auto-scroll on manual navigation
+    const maxScroll = categoryCarousel.scrollWidth - categoryCarousel.clientWidth;
+    scrollAmount = Math.min(scrollAmount + scrollStep, maxScroll);
+    categoryCarousel.style.transform = `translateX(-${scrollAmount}px)`;
+    setTimeout(() => {
+        startAutoScroll(); // Resume auto-scroll after a delay
+    }, resumeDelay);
+});
+
+// Event listeners for hover effect
+categoryCarousel.addEventListener('mouseenter', stopAutoScroll);
+categoryCarousel.addEventListener('mouseleave', startAutoScroll);
+
+// Start auto-scroll initially
+startAutoScroll();
+
+
+    </script>
+</body>
+</html>
