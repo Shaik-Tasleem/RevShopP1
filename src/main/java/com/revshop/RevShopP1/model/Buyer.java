@@ -1,5 +1,6 @@
 package com.revshop.RevShopP1.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,8 +16,11 @@ public class Buyer {
 	
 	private String firstName;
 	private String lastName;
+	@Column(unique = true)
 	private String email;
+	@Column(unique = true)
 	private String mobileNumber;
+	@Column(unique = true)
 	private String password;
 	private String street;
 	private String city;

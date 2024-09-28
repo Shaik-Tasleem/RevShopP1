@@ -26,9 +26,4 @@ public class BuyerController {
 		buyerService.insertBuyer(buyer);
 		return "BuyerRegistration";
 	}
-	
-	
-	
-	
-
 }
