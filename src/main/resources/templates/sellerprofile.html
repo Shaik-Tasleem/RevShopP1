@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Profile Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .profile-sidebar {
+            background-color: #f8f9fa;
+            height: 100vh;
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0,0,0,0.1);
+        }
+
+        .profile-sidebar h4 {
+            margin-bottom: 20px;
+        }
+
+        .profile-sidebar .nav-link {
+            color: #333;
+            font-weight: 500;
+            border-radius: 5px;
+        }
+
+        .profile-sidebar .nav-link:hover {
+            background-color: #e9ecef;
+        }
+
+        .profile-content {
+            padding: 20px;
+            animation: fadeIn 0.5s;
+        }
+
+        .profile-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #fff;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-cancel {
+            background-color: #f8d7da;
+            border: none;
+            color: #721c24;
+            margin-right: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .form-progress {
+            margin-top: 15px;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block profile-sidebar">
+                <h4>Hello Seller!</h4>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:onclick="'showSection(''personal-info'')'">Personal Information</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:onclick="'showSection(''privacy-security'')'">Privacy & Security</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:onclick="'showSection(''notifications'')'">All Notifications</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">Logout</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Main content area -->
+            <main class="col-md-9 col-lg-10 profile-content">
+                <!-- Personal Information Section -->
+                <div id="personal-info" class="profile-card mb-4">
+                    <h3>Personal Information</h3>
+                    <form th:action="@{/seller/update}" method="post">
+                        <div class="mb-3">
+                            <label for="first-name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first-name" name="firstName" th:value="${seller.firstName}" placeholder="Enter your first name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="last-name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last-name" name="lastName" th:value="${seller.lastName}" placeholder="Enter your last name" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" th:value="${seller.email}" placeholder="Enter your email address" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="mobile" class="form-label">Mobile Number</label>
+                            <input type="tel" class="form-control" id="mobile" name="phoneNumber" th:value="${seller.phoneNumber}" placeholder="Enter your mobile number" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="business-name" class="form-label">Business Name</label>
+                            <input type="text" class="form-control" id="business-name" name="businessName" th:value="${seller.businessName}" placeholder="Enter your business name" required>
+                        </div>
+
+                        <button type="button" class="btn btn-cancel">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+
+                <!-- Privacy & Security Section -->
+                <div id="privacy-security" class="profile-card mb-4 hidden">
+                    <h3>Privacy & Security</h3>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#passwordResetModal">Reset Password</button>
+                    <form th:action="@{/seller/changePassword}" method="post">
+                        <div class="mb-3">
+                            <label for="current-password" class="form-label">Current Password</label>
+                            <input type="password" class="form-control" id="current-password" name="currentPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="new-password" class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="new-password" name="newPassword" required>
+                        </div>
+                        <button type="button" class="btn btn-cancel">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Change Password</button>
+                    </form>
+                </div>
+
+                <!-- Notifications Section -->
+                <div id="notifications" class="profile-card mb-4 hidden">
+                    <h3>All Notifications</h3>
+                    <p>No notifications at the moment.</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Password Reset Modal -->
+    <div class="modal fade" id="passwordResetModal" tabindex="-1" aria-labelledby="passwordResetModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passwordResetModalLabel">Password Reset</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Step 1: Enter Email -->
+                    <form id="step1" th:action="@{/seller/sendPasswordResetEmail}" method="post">
+                        <div class="mb-3">
+                            <label for="reset-email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="reset-email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Verification Code</button>
+                    </form>
+
+                    <!-- Step 2: Enter Verification Code (Hidden initially) -->
+                    <form id="step2" class="hidden" th:action="@{/seller/verifyCode}" method="post">
+                        <div class="mb-3">
+                            <label for="verification-code" class="form-label">Enter Verification Code</label>
+                            <input type="text" class="form-control" id="verification-code" name="code" placeholder="Enter the code" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Verify Code</button>
+                    </form>
+
+                    <!-- Step 3: Reset Password (Hidden initially) -->
+                    <form id="step3" class="hidden" th:action="@{/seller/resetPassword}" method="post">
+                        <div class="mb-3">
+                            <label for="new-password" class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="new-password" name="newPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirm-password" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirm-password" name="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Reset Password</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to handle section display -->
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.profile-card').forEach(function(section) {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
