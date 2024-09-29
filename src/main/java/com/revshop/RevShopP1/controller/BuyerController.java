@@ -29,7 +29,7 @@ public class BuyerController {
 	@PostMapping("/buyerRegistration")
 	public String registration(@ModelAttribute Buyer buyer) {
 		buyerService.insertBuyer(buyer);
-		return "welcomepage";
+		return "indexPage";
 	}
 	 @Autowired
 	    private EmailService emailService;  

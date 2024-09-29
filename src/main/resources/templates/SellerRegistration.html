@@ -27,17 +27,24 @@
             justify-content: flex-start;
             align-items: center;
             height: 100%;
-            
-            padding: 20px;
+            background: rgba(0,0,0,0);
+
+            padding: 2% 5%;
             border-radius: 10px;
         }
+        @media (max-width: 768px) {
+    .card {
+        width: 100%; /* Take up full width on screens smaller than 768px */
+    }
+}
         .card {
-            width: 100%;
+            width: 90%;
             max-width: 500px;
             padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
             border-radius: 10px;
+            box-sizing: border-box;
         }
         .form-section {
             display: none;
@@ -74,7 +81,7 @@
             <form th:action="@{/ecom/sellerRegistration}" th:object="${seller}" id="sellerRegistrationForm" class="needs-validation" novalidate method="post">
                 <!-- Personal Details Section -->
                 <div id="step1" class="form-section active">
-                    <h4 class="section-heading">Personal Details</h4>
+                    <h4 style="font-weight:20px;" class="section-heading">Personal Details</h4>
                     <div class="mb-3">
                         <label for="firstName" class="form-label">First Name</label>
                         <input type="text" class="form-control" id="firstName" th:field="*{firstName}" required>
@@ -93,8 +100,9 @@
                     </div>
                     <div class="mb-3">
                         <label for="mobileNumber" class="form-label">Mobile Number</label>
-                        <input type="text" class="form-control" id="mobileNumber" th:field="*{mobileNumber}" required>
-                        <div class="invalid-feedback">Please enter a valid mobile number.</div>
+                        <input type="text" class="form-control" id="mobileNumber" th:field="*{mobileNumber}" required >
+          				<div class="valid-feedback">Looks good!</div>
+                        <div class="invalid-feedback">Please enter a valid 10 digit mobile number.</div>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
