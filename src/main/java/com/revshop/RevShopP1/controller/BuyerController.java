@@ -24,12 +24,12 @@ public class BuyerController {
 	@GetMapping("/buyerRegistration")
 	public String registrationForm(Model model) {
 		model.addAttribute("buyer", new Buyer());
-		return "BuyerRegistration";
+		return "addProducts";
 	}
 	@PostMapping("/buyerRegistration")
 	public String registration(@ModelAttribute Buyer buyer) {
 		buyerService.insertBuyer(buyer);
-		return "welcomepage";
+		return "indexPage";
 	}
 	 @Autowired
 	    private EmailService emailService;  

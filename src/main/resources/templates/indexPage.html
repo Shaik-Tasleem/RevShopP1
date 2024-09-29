@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Particle Animation for E-commerce</title>
@@ -31,7 +31,7 @@
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        background: rgb(238, 238, 213); /* Changed background color here */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -42,10 +42,10 @@
 
       @keyframes pulseBackground {
         0%, 100% {
-          background-color: rgba(0, 0, 0, 0.95);
+          background-color: rgb(238, 238, 213);
         }
         50% {
-          background-color: rgba(0, 0, 0, 0.85);
+          background-color: rgb(238, 238, 213);
         }
       }
 
@@ -191,8 +191,8 @@
         }
       }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div id="particles-js"></div>
 
     <!-- Preloader Section -->
@@ -249,5 +249,5 @@
         }, 2000);
       });
     </script>
-  </body>
+</body>
 </html>
