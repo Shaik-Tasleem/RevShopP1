@@ -132,6 +132,26 @@
             margin-top: 10px;
             margin-left: 18%;
         }
+        .back-btn {
+    		background-color: goldenrod;
+    		color: white; 
+    		padding: 10px 20px; 
+    		border: none; 
+    		border-radius: 20px; 
+    		font-size: 16px; 
+    		cursor: pointer; 
+   		 	margin-top: 20px; 
+    		transition: background-color 0.3s ease; 
+		}
+		.back-btn:hover {
+    		background-color: darkgoldenrod; 
+    		transform: scale(1.05);
+    		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+		}
+        .a-back-btn{
+        	color:white;
+        	text-decoration:none;
+        }
     </style>
 </head>
 <body>
@@ -139,6 +159,7 @@
         <div class="left-section">
             <h1>Login</h1>
             <img th:src="@{/images/login.jpg}" alt="Login illustration">
+            <button class="back-btn" type="button"><a th:href="@{/ecom/LoginPage}" class="a-back-btn">Back to Home</a></button>
         </div>
         <div class="right-section">
             <div class="login-box">
@@ -185,7 +206,11 @@
             </div>
         </div>
     </div>
-
+	<div th:if="${errorMessage}">
+    	<script th:inline="javascript">
+        	alert('[[${errorMessage}]]');
+        </script>
+    </div>
     <script>
         function toggleInput() {
             var emailInput = document.getElementById("emailInput");

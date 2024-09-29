@@ -13,5 +13,11 @@ public class BuyerService {
 	public void insertBuyer(Buyer buyer) {
 		buyerRepo.save(buyer);
 	}
+	public Buyer getBuyerDetailsByEmail(String email) {
+		return buyerRepo.findByEmail(email);
+	}
+	public Buyer getBuyerDetailsByMobileNumber(String mobileNumber) {
+		return buyerRepo.findByMobileNumber(mobileNumber);
+	}
 
 }
