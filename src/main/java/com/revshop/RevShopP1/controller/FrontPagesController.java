@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.revshop.RevShopP1.model.Buyer;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -14,13 +16,11 @@ public class FrontPagesController {
 		return "LoginPage";
 	}
 	@PostMapping("/seller/handleLogin")
-	public String sellerLogin(@RequestParam String email, @RequestParam  String mobileNumber, @RequestParam String password,Model model) {
-        if (email != null) {
-            System.out.println("Email: " + email);
-        } else {
-            System.out.println("Mobile Number: " + mobileNumber);
-        }
-        System.out.println("Password: " + password);
-        return "redirect:/dashboard";
+	public String sellerLogin(Model model,HttpSession session) {
+        
+        Buyer b=(Buyer)session.getAttribute("buyer");
+        System.out.println(b.getBuyerId());
+		return "LoginPage";
+        
 	}
 }
