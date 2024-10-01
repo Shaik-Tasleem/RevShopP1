@@ -61,8 +61,8 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<<<<<<< HEAD
-=======
+
+
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf -->
 <dependency>
     <groupId>org.springframework.boot</groupId>
@@ -78,7 +78,6 @@
     <artifactId>spring-session-jdbc</artifactId>
 </dependency>
 
->>>>>>> 1e3195eb68ab3b49105dfd6e9ccc14ae49a248a8
 	</dependencies>
 
 	<build>

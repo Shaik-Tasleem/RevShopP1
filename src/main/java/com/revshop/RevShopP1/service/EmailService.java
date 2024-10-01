@@ -1,6 +1,4 @@
 package com.revshop.RevShopP1.service;
-
-
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
->>>>>>> 1e3195eb68ab3b49105dfd6e9ccc14ae49a248a8
+
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;

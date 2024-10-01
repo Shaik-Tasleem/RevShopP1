@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.revshop.RevShopP1.service.EmailService;
+import com.revshop.RevShopP1.service.EmailServices;
 
 import jakarta.servlet.http.HttpSession;
 import java.util.Random;
@@ -16,7 +16,7 @@ import java.util.Random;
 public class PasswordResetController {
 
     @Autowired
-    private EmailService emailService;
+    private EmailServices emailServices;
     @GetMapping("/forgot-password")
     public String showForgotPasswordForm() {
         return "forgot-password"; // This will load the "forgot-password.html" Thymeleaf template
@@ -30,7 +30,7 @@ public class PasswordResetController {
 
         try {
             // Send the verification email
-            emailService.sendVerificationEmail(email, verificationCode);
+            emailServices.sendVerificationEmail(email, verificationCode);
             // Save the code and email in session
             session.setAttribute("verificationCode", verificationCode);
             session.setAttribute("email", email);
