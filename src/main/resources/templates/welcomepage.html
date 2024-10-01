@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,7 +47,7 @@ input[type="text"] {
     padding: 10px 20px; /* Padding inside the input */
     font-size: 16px; /* Font size for text inside input */
     outline: none; /* Removes the default outline */
-    width: 300px; /* Width of the search box */
+    width: 680px !important; /* Width of the search box */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 50%; /* Optional shadow for depth */
 }
@@ -298,6 +298,20 @@ footer {
     /* Apply bounce animation on hover */
     transform: scale(1.05); /* Slightly increase size on hover */
 }
+ button {
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove border */
+    border-radius: 50px; /* Circular border */
+    padding: 10px 20px; /* Padding inside the button */
+    font-size: 16px; /* Font size for button text */
+    cursor: pointer; /* Change cursor on hover */
+    transition: background-color 0.3s; /* Smooth background transition */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker background on hover */
+}
 
 
 /* 
@@ -348,10 +362,12 @@ footer {
 <body>
     <header>
         <div class="logo"><img src="http://127.0.0.1:5500/images/revshop-logo.png"><span></span></div>
-        <input type="text" placeholder="Search for products, brands, and more" />
-        <nav>
-            
-        </nav>
+        <div>
+			<form action="/search" method="post">
+            <input type="text" name="keyword" placeholder="Search for products..." 
+                   th:value="${keyword}" /><span></span>
+            <button type="submit">Search<span></span></button>
+        </form><span></span></div>
         <div class="account-cart">
             <button class="account-icon"> <span><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/profile-52e0dc.svg" alt="Login"></span>   Login</button>
             <button class="cart-icon"><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg" alt="Cart"> <span> Cart</span></button>
