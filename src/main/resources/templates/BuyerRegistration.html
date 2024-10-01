@@ -9,24 +9,35 @@
     <style>
         body, html {
             height: 100%;
-            background: url('/images/regis.jpg') no-repeat center center/cover;
+             margin:0;
+            overflow:hidden;
+        }
+        #bgVideo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0; /* Ensure the video is behind all content */
         }
         .form-container {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             height: 100%;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
+            background: rgba(0,0,0,0);
+            padding: 2% 5% ;
             border-radius: 10px;
         }
         .card {
-            width: 100%;
+            width: 90%;
             max-width: 500px;
             padding: 20px;
+             background-color: rgba(255, 255, 255, 0.8);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
             border-radius: 10px;
+       box-sizing: border-box;
         }
         .form-section {
             display: none;
@@ -60,6 +71,10 @@
     </style>
 </head>
 <body>
+	<video autoplay muted loop id="bgVideo">
+        <source src="/videos/vid.mov" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
 	
     <div class="container-fluid form-container">
         <div class="card shadow">
