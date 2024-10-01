@@ -23,4 +23,8 @@ public class FrontPagesController {
 	public String welcomePage(Model model) {
 		return "welcomepage";
 	}
+	@GetMapping("/ForgotPassword")
+	public String forgotPassword(Model model) {
+		return "ForgotPassword";
+	}
 }

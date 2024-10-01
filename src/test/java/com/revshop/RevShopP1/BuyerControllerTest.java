@@ -16,6 +16,7 @@ import com.revshop.RevShopP1.controller.BuyerController;
 import com.revshop.RevShopP1.model.Buyer;
 import com.revshop.RevShopP1.service.BuyerService;
 import com.revshop.RevShopP1.service.EmailService;
+import com.revshop.RevShopP1.utils.PasswordUtils;
 
 public class BuyerControllerTest {
 
@@ -24,6 +25,9 @@ public class BuyerControllerTest {
 
     @Mock
     private EmailService emailService;
+    
+    @Mock
+    private PasswordUtils pwd_obj;
 
     @InjectMocks
     private BuyerController buyerController;
@@ -112,4 +116,81 @@ public class BuyerControllerTest {
 
         verify(emailService, times(1)).verifyOtp("test@example.com", "123456");
     }
+    @Test
+    public void testBuyerLoginSuccessWithEmail() throws Exception {
+        Buyer mockBuyer = new Buyer();
+        mockBuyer.setEmail("test@example.com");
+        mockBuyer.setPassword("hashedPassword");
+
+        when(buyerService.getBuyerDetailsByEmail(anyString())).thenReturn(mockBuyer);
+        when(pwd_obj.hashPassword(anyString())).thenReturn("hashedPassword");
+
+        mockMvc.perform(post("/buyer/handleLogin")
+               .param("email", "test@example.com")
+               .param("password", "password123")
+               .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+               .andExpect(status().isOk())
+               .andExpect(view().name("LoginPage"))
+               .andExpect(model().attributeDoesNotExist("errorMessage"));
+
+        verify(buyerService, times(1)).getBuyerDetailsByEmail("test@example.com");
+    }
+    @Test
+    public void testBuyerLoginFailureWithEmailInvalidPassword() throws Exception {
+        Buyer mockBuyer = new Buyer();
+        mockBuyer.setEmail("test@example.com");
+        mockBuyer.setPassword("hashedPassword");
+
+        when(buyerService.getBuyerDetailsByEmail(anyString())).thenReturn(mockBuyer);
+        when(pwd_obj.hashPassword(anyString())).thenReturn("wrongHashedPassword");
+
+        mockMvc.perform(post("/buyer/handleLogin")
+               .param("email", "test@example.com")
+               .param("password", "wrongPassword")
+               .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+               .andExpect(status().isOk())
+               .andExpect(view().name("LoginPage"))
+               .andExpect(model().attribute("errorMessage", "Invalid Email or Password...\nIf you are a new user Kindly...Register..\nTo access our Services.."));
+
+        verify(buyerService, times(1)).getBuyerDetailsByEmail("test@example.com");
+    }
+    @Test
+    public void testBuyerLoginSuccessWithMobileNumber() throws Exception {
+        Buyer mockBuyer = new Buyer();
+        mockBuyer.setMobileNumber("1234567890");
+        mockBuyer.setPassword("hashedPassword");
+
+        when(buyerService.getBuyerDetailsByMobileNumber(anyString())).thenReturn(mockBuyer);
+        when(pwd_obj.hashPassword(anyString())).thenReturn("hashedPassword");
+
+        mockMvc.perform(post("/buyer/handleLogin")
+               .param("mobileNumber", "1234567890")
+               .param("password", "password123")
+               .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+               .andExpect(status().isOk())
+               .andExpect(view().name("LoginPage"))
+               .andExpect(model().attributeDoesNotExist("errorMessage"));
+
+        verify(buyerService, times(1)).getBuyerDetailsByMobileNumber("1234567890");
+    }
+    @Test
+    public void testBuyerLoginFailureWithMobileNumberInvalidPassword() throws Exception {
+        Buyer mockBuyer = new Buyer();
+        mockBuyer.setMobileNumber("1234567890");
+        mockBuyer.setPassword("hashedPassword");
+
+        when(buyerService.getBuyerDetailsByMobileNumber(anyString())).thenReturn(mockBuyer);
+        when(pwd_obj.hashPassword(anyString())).thenReturn("wrongHashedPassword");
+
+        mockMvc.perform(post("/buyer/handleLogin")
+               .param("mobileNumber", "1234567890")
+               .param("password", "wrongPassword")
+               .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+               .andExpect(status().isOk())
+               .andExpect(view().name("LoginPage"))
+               .andExpect(model().attribute("errorMessage", "Invalid Email or Password...\nIf you are a new user Kindly...Register to access our Services.."));
+
+        verify(buyerService, times(1)).getBuyerDetailsByMobileNumber("1234567890");
+    }
+
 }
