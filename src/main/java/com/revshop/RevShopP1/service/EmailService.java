@@ -1,7 +1,6 @@
 package com.revshop.RevShopP1.service;
 
-<<<<<<< HEAD
-=======
+
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
-<<<<<<< HEAD
+
 
     private final JavaMailSender mailSender;
 
@@ -34,7 +33,7 @@ public class EmailService {
 
         mailSender.send(message);
     }
-=======
+
 	@Autowired
     private JavaMailSender javaMailSender;
 
@@ -74,6 +73,5 @@ public class EmailService {
         System.out.println("Verifying OTP for " + email + ": Entered OTP = " + inputOtp + ", Stored OTP = " + storedOtp); // Log the verification details
         return storedOtp != null && storedOtp.equals(inputOtp);
     }
-	 
->>>>>>> 1e3195eb68ab3b49105dfd6e9ccc14ae49a248a8
+
 }
