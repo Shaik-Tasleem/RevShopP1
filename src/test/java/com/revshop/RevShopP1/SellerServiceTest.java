@@ -3,6 +3,7 @@ package com.revshop.RevShopP1;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +45,7 @@ public class SellerServiceTest {
     }
 
     @Test
-    public void testInsertSeller() {
+    public void testInsertSeller() throws NoSuchAlgorithmException {
         sellerService.insertSeller(testSeller);
         verify(sellerRepo, times(1)).save(testSeller);
     }

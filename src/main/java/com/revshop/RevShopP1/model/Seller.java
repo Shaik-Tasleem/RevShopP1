@@ -1,9 +1,11 @@
 package com.revshop.RevShopP1.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.*;
 @Entity
 @Table(name="seller")
-public class Seller {
+public class Seller implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long sellerId;

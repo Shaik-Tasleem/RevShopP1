@@ -32,13 +32,13 @@ public class BuyerController {
 	@GetMapping("/buyerRegistration")
 	public String registrationForm(Model model) {
 		model.addAttribute("buyer", new Buyer());
-		return "addProducts";
+		return "BuyerRegistration";
 	}
 
 	@PostMapping("/buyerRegistration")
 	public String registration(@ModelAttribute Buyer buyer) throws NoSuchAlgorithmException {
 		buyerService.insertBuyer(buyer);
-		return "indexPage";
+		return "LoginPage";
 	}
 
 	@Autowired

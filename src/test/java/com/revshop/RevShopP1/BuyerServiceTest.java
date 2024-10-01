@@ -3,6 +3,7 @@ package com.revshop.RevShopP1;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +30,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void testInsertBuyer() {
+    void testInsertBuyer() throws NoSuchAlgorithmException {
         Buyer buyer = new Buyer();
         buyer.setFirstName("John");
         buyer.setLastName("Doe");
