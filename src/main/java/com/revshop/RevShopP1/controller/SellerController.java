@@ -17,50 +17,52 @@ import com.revshop.RevShopP1.model.Seller;
 import com.revshop.RevShopP1.service.BuyerService;
 import com.revshop.RevShopP1.service.EmailService;
 import com.revshop.RevShopP1.service.SellerService;
+
 @Controller
 @RequestMapping("/ecom")
 public class SellerController {
-		@Autowired
-		private SellerService sellerService;
-		@GetMapping("/sellerRegistration")
-		public String registrationForm(Model model) {
-			model.addAttribute("seller", new Seller());
-			return "SellerRegistration";
-		}
-		@PostMapping("/sellerRegistration")
-		public String registration(@ModelAttribute Seller seller) {
-			sellerService.insertSeller(seller);
-			return "SellerRegistration";
-		}
-		 @Autowired
-		    private EmailService emailService;  
-		    @PostMapping("/api/send-verificationseller")
-		    @ResponseBody
-		    public ResponseEntity<String> sendVerificationEmail(@RequestParam("email") String sellerEmail) {
-		        String otp = emailService.generateOtp();  
-		        boolean emailSent = emailService.sendEmail(sellerEmail, otp);  
+	@Autowired
+	private SellerService sellerService;
 
-		        if (emailSent) {
-		            return ResponseEntity.ok("OTP sent successfully.");
-		        } else {
-		            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send OTP.");
-		        }
-		    }
-		    @PostMapping("/api/verify-codeseller")
-		    @ResponseBody
-		    public ResponseEntity<String> verifyOtp(@RequestParam("email") String sellerEmail, @RequestParam("code") String otp) {
-		        boolean isOtpValid = emailService.verifyOtp(sellerEmail, otp);
+	@GetMapping("/sellerRegistration")
+	public String registrationForm(Model model) {
+		model.addAttribute("seller", new Seller());
+		return "SellerRegistration";
+	}
 
-		        if (isOtpValid) {
-		            return ResponseEntity.ok("OTP verified successfully.");
-		        } else {
-		            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP.");
-		        }
-		
-		
-		
-		
-		
+	@PostMapping("/sellerRegistration")
+	public String registration(@ModelAttribute Seller seller) {
+		sellerService.insertSeller(seller);
+		return "SellerRegistration";
+	}
+
+	@Autowired
+	private EmailService emailService;
+
+	@PostMapping("/api/send-verificationseller")
+	@ResponseBody
+	public ResponseEntity<String> sendVerificationEmail(@RequestParam("email") String sellerEmail) {
+		String otp = emailService.generateOtp();
+		boolean emailSent = emailService.sendEmail(sellerEmail, otp);
+
+		if (emailSent) {
+			return ResponseEntity.ok("OTP sent successfully.");
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send OTP.");
+		}
+	}
+
+	@PostMapping("/api/verify-codeseller")
+	@ResponseBody
+	public ResponseEntity<String> verifyOtp(@RequestParam("email") String sellerEmail,
+			@RequestParam("code") String otp) {
+		boolean isOtpValid = emailService.verifyOtp(sellerEmail, otp);
+
+		if (isOtpValid) {
+			return ResponseEntity.ok("OTP verified successfully.");
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP.");
+		}
 
 	}
 }

@@ -9,8 +9,11 @@ public class Seller {
 	private Long sellerId;
 	private String firstName;
 	private String lastName;
+	@Column(unique = true)
 	private String email;
+	@Column(unique = true)
 	private String mobileNumber;
+	@Column(unique = true)
 	private String password;
 	private String bussinessName;
 	private String street;
