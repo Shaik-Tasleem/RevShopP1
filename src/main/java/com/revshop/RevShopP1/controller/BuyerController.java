@@ -82,8 +82,6 @@ public class BuyerController {
 				return "LoginPage";
 			} else {
 				session.setAttribute("buyer", buyer_obj);
-				Buyer b = (Buyer) session.getAttribute("buyer");
-				System.out.println(b.getBuyerId());
 				return "LoginPage";
 			}
 		} else {
