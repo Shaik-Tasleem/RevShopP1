@@ -1,16 +1,21 @@
 package com.revshop.RevShopP1.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.*;
 @Entity
 @Table(name="seller")
-public class Seller {
+public class Seller implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long sellerId;
 	private String firstName;
 	private String lastName;
+	@Column(unique = true)
 	private String email;
+	@Column(unique = true)
 	private String mobileNumber;
+	@Column(unique = true)
 	private String password;
 	private String bussinessName;
 	private String street;

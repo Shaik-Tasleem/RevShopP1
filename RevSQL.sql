@@ -20,12 +20,11 @@ CREATE TABLE SPRING_SESSION_ATTRIBUTES (
     ATTRIBUTE_NAME VARCHAR(200) NOT NULL,
     ATTRIBUTE_BYTE BLOB NOT NULL,
     CONSTRAINT SPRING_SESSION_ATTRIBUTES_PK PRIMARY KEY (SESSION_PRIMARY_ID, ATTRIBUTE_NAME),
-    CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_PRIMARY_ID) REFERENCES SPRING_SESSION(PRIMARY_ID) ON DELETE CASCADE
+    CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_PRIMARY_ID) 
+    REFERENCES SPRING_SESSION(PRIMARY_ID) ON DELETE CASCADE
 );
-drop table SPRING_SESSION;
-drop table SPRING_SESSION_ATTRIBUTES;
-create table categories(
-CategoryId int not null primary key,
+create table Category(
+CategoryId int not null primary key auto_increment,
 CategoryName varchar(200) not null
 );
 insert into categories(CategoryId,CategoryName) values(1,'Tshirts');
@@ -40,6 +39,3 @@ insert into categories(CategoryId,CategoryName) values(9,'VideosGames');
 insert into categories(CategoryId,CategoryName) values(10,'Furniture');
 insert into categories(CategoryId,CategoryName) values(11,'Laptops');
 insert into categories(CategoryId,CategoryName) values(12,'EarBuds');
-
-alter table categories rename Category;
-alter table category auto_increment=1;

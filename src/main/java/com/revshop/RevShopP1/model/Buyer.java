@@ -1,28 +1,40 @@
 package com.revshop.RevShopP1.model;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import java.io.Serializable;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name="buyer")
-public class Buyer {
+public class Buyer implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long buyerId;
 	
 	private String firstName;
 	private String lastName;
+	@Column(unique = true)
 	private String email;
+	@Column(unique = true)
 	private String mobileNumber;
+	@Column(unique = true)
 	private String password;
 	private String street;
 	private String city;
 	private int postalCode;
 	private String state;
 	private String country;
+//	@OneToMany(mappedBy="comment",cascade=CascadeType.ALL)
+//	private List<Product> products=new ArrayList<>();
 	public Long getBuyerId() {
 		return buyerId;
 	}
