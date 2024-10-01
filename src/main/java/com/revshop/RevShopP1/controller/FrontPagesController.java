@@ -15,12 +15,12 @@ public class FrontPagesController {
 	public String loginPage(Model model) {
 		return "LoginPage";
 	}
-	@PostMapping("/seller/handleLogin")
-	public String sellerLogin(Model model,HttpSession session) {
-        
-        Buyer b=(Buyer)session.getAttribute("buyer");
-        System.out.println(b.getBuyerId());
-		return "LoginPage";
-        
+	@GetMapping
+	public String frontPage(Model model) {
+		return "indexPage";
+	}
+	@GetMapping("/welcomepage")
+	public String welcomePage(Model model) {
+		return "welcomepage";
 	}
 }

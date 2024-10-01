@@ -28,69 +28,75 @@ public class BuyerController {
 	private BuyerService buyerService;
 	@Autowired
 	private PasswordUtils pwd_obj;
+
 	@GetMapping("/buyerRegistration")
 	public String registrationForm(Model model) {
 		model.addAttribute("buyer", new Buyer());
 		return "addProducts";
 	}
+
 	@PostMapping("/buyerRegistration")
 	public String registration(@ModelAttribute Buyer buyer) throws NoSuchAlgorithmException {
 		buyerService.insertBuyer(buyer);
 		return "indexPage";
 	}
-	 @Autowired
-	    private EmailService emailService;  
-	    @PostMapping("/api/send-verification")
-	    @ResponseBody
-	    public ResponseEntity<String> sendVerificationEmail(@RequestParam("email") String buyerEmail) {
-	        String otp = emailService.generateOtp();  
-	        boolean emailSent = emailService.sendEmail(buyerEmail, otp);  
 
-	        if (emailSent) {
-	            return ResponseEntity.ok("OTP sent successfully.");
-	        } else {
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send OTP.");
-	        }
-	    }
-	    @PostMapping("/api/verify-code")
-	    @ResponseBody
-	    public ResponseEntity<String> verifyOtp(@RequestParam("email") String buyerEmail, @RequestParam("code") String otp) {
-	        boolean isOtpValid = emailService.verifyOtp(buyerEmail, otp);
+	@Autowired
+	private EmailService emailService;
 
-	        if (isOtpValid) {
-	            return ResponseEntity.ok("OTP verified successfully.");
-	        } else {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP.");
-	        }
+	@PostMapping("/api/send-verification")
+	@ResponseBody
+	public ResponseEntity<String> sendVerificationEmail(@RequestParam("email") String buyerEmail) {
+		String otp = emailService.generateOtp();
+		boolean emailSent = emailService.sendEmail(buyerEmail, otp);
+
+		if (emailSent) {
+			return ResponseEntity.ok("OTP sent successfully.");
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send OTP.");
+		}
+	}
+
+	@PostMapping("/api/verify-code")
+	@ResponseBody
+	public ResponseEntity<String> verifyOtp(@RequestParam("email") String buyerEmail,
+			@RequestParam("code") String otp) {
+		boolean isOtpValid = emailService.verifyOtp(buyerEmail, otp);
+
+		if (isOtpValid) {
+			return ResponseEntity.ok("OTP verified successfully.");
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP.");
+		}
+	}
+
 	@PostMapping("/buyer/handleLogin")
-	public String buyerLogin(@RequestParam(required=false) String email, @RequestParam(required=false)  String mobileNumber, @RequestParam String password,Model model,HttpSession session) throws NoSuchAlgorithmException {
+	public String buyerLogin(@RequestParam(required = false) String email,
+			@RequestParam(required = false) String mobileNumber, @RequestParam String password, Model model,
+			HttpSession session) throws NoSuchAlgorithmException {
 		if (email != null) {
-			Buyer buyer_obj=buyerService.getBuyerDetailsByEmail(email);
-			if(buyer_obj==null || !buyer_obj.getPassword().equals(pwd_obj.hashPassword(password))) {
-				String msg="Invalid Email or Password...\nIf you are a new user Kindly...Register..\nTo access our Services..";
+			Buyer buyer_obj = buyerService.getBuyerDetailsByEmail(email);
+			if (buyer_obj == null || !buyer_obj.getPassword().equals(pwd_obj.hashPassword(password))) {
+				String msg = "Invalid Email or Password...\nIf you are a new user Kindly...Register..\nTo access our Services..";
 				model.addAttribute("errorMessage", msg);
 				return "LoginPage";
-			}
-			else {
+			} else {
 				session.setAttribute("buyer", buyer_obj);
-				Buyer b=(Buyer)session.getAttribute("buyer");
+				Buyer b = (Buyer) session.getAttribute("buyer");
 				System.out.println(b.getBuyerId());
 				return "LoginPage";
 			}
-        } else {
-            Buyer buyer_obj=buyerService.getBuyerDetailsByMobileNumber(mobileNumber);
-            if(buyer_obj==null || !buyer_obj.getPassword().equals(pwd_obj.hashPassword(password))) {
-				String msg="Invalid Email or Password...\nIf you are a new user Kindly...Register to access our Services..";
+		} else {
+			Buyer buyer_obj = buyerService.getBuyerDetailsByMobileNumber(mobileNumber);
+			if (buyer_obj == null || !buyer_obj.getPassword().equals(pwd_obj.hashPassword(password))) {
+				String msg = "Invalid Email or Password...\nIf you are a new user Kindly...Register to access our Services..";
 				model.addAttribute("errorMessage", msg);
 				return "LoginPage";
-			}
-			else {
+			} else {
 				session.setAttribute("buyer", buyer_obj);
 				return "LoginPage";
 			}
-        }
-   
+		}
+
 	}
-}
-	    
 }
