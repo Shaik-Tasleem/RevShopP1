@@ -1,6 +1,8 @@
 package com.revshop.RevShopP1.controller;
 
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,8 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/ecom")
 public class ForgotPasswordController {
+	private final Map<String, String> verifyCodeStorage = new ConcurrentHashMap<>();
+	private String em="";
 	@Autowired
 	private ForgotService forgotService;
 	@PostMapping("/api/send-verification/forgot")
@@ -21,13 +25,11 @@ public class ForgotPasswordController {
     public String sendVerificationCode(@RequestParam("email") String email, HttpSession session) {
         // Generate a random 6-digit code
         String verificationCode = String.format("%06d", new Random().nextInt(999999));
-
         try {
             // Send the verification email
         	forgotService.sendVerificationEmail(email, verificationCode);
-            // Save the code and email in session
-            session.setAttribute("verificationCode", verificationCode);
-            session.setAttribute("email", email);
+        	em=email;
+        	verifyCodeStorage.put(email, verificationCode);
             return "Verification code sent to your email.";
         } catch (Exception e) {
             return e.getMessage();
@@ -36,9 +38,8 @@ public class ForgotPasswordController {
 
     @PostMapping("/api/verify-code/forgot")
     @ResponseBody
-    public String verifyCode(@RequestParam("code") String code, HttpSession session) {
-        String sessionCode = (String) session.getAttribute("verificationCode");
-        
+    public String verifyCode(@RequestParam("code") String code,HttpSession session) {
+    	String sessionCode = verifyCodeStorage.get(em);
         if (sessionCode != null && sessionCode.equals(code)) {
             return "Code verified successfully.";
         } else {
@@ -50,7 +51,6 @@ public class ForgotPasswordController {
     public String resetPassword(
             @RequestParam("new-password") String newPassword, 
             @RequestParam("confirm-password") String confirmPassword, 
-            HttpSession session, 
             Model model) {
 
         // Validate password match
@@ -59,17 +59,14 @@ public class ForgotPasswordController {
             return "forgot-password";  // return to the reset form
         }
 
-        // Retrieve the email from the session
-        String email = (String) session.getAttribute("email");
-
-        if (email == null) {
+        if (em == null) {
             model.addAttribute("error", "Session expired, please try again.");
             return "forgot-password"; // return to the reset form
         }
 
         // Update the user's password (this is an example, you should hash the password)
         // userService.updatePassword(email, newPassword);
-
+        
         model.addAttribute("message", "Password reset successfully.");
         return "login";  // Redirect to the login page after success
     }
