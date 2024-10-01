@@ -1,5 +1,4 @@
 package com.revshop.RevShopP1.service;
-
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,12 +7,31 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
+
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
+
+
+    private final JavaMailSender mailSender;
+
+    public EmailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    // Send plain text email without MimeMessage
+    public void sendVerificationEmail(String to, String verificationCode) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Password Reset Verification Code");
+        message.setText("Your verification code is: " + verificationCode);
+
+        mailSender.send(message);
+    }
+
 	@Autowired
     private JavaMailSender javaMailSender;
 
@@ -51,5 +69,5 @@ public class EmailService {
         
         return storedOtp != null && storedOtp.equals(inputOtp);
     }
-	 
+
 }

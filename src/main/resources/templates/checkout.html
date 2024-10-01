@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Checkout Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f6f9;
+        }
+        .checkout-container {
+            
+            margin-top: 20px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .price-summary, .card {
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .price-summary:hover, .card:hover {
+            transform: translateY(-5px);
+        }
+        .total-payable {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .delivery-options {
+            background-color: #f1f1f1;
+            padding: 10px;
+        }
+        .apply-coupon-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .apply-coupon-btn:hover {
+            background-color: #218838;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.2);
+        }
+        .wishlist-btn {
+            background-color: #ffc107;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .wishlist-btn:hover {
+            background-color: #e0a800;
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.2);
+        }
+        .btn-light {
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .btn-light:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.1);
+        }
+        .toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #28a745; /* Green for success */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: opacity 0.5s ease;
+    opacity: 0.9; /* Slightly transparent */
+}
+        #wishlistBtn i {
+            animation: heartbeat 1.5s infinite;
+        }
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                translform: scale(1.2);
+            }
+        }
+        #productQuantity {
+            text-align: center;
+        }
+        .card-body img {
+            transition: transform 0.3s ease-in-out;
+        }
+        .card-body img:hover {
+            transform: scale(1.1);
+        }
+        /* Tooltip Styling */
+        .tooltip-inner {
+            background-color: #28a745;
+            color: #fff;
+            font-weight: bold;
+        }
+        #giftMessageContainer {
+            display: none; /* Initially hidden */
+        }
+        .mt-3 {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container checkout-container">
+
+    <div class="row">
+        <!-- Left Section: Product and Order Details -->
+        <div class="col-lg-8 col-md-12">
+            <div class="card mb-3">
+                <div class="card-header">ORDER SUMMARY</div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <img id="productImage" src="" class="img-fluid" alt="Product Image" style="max-width: 150px;">
+                        <div>
+                            <p id="productName" class="fs-5"></p>
+                            <p id="productPrice" class="text-muted"></p>
+                            <p class="discount-price text-danger" id="productDiscount"></p>
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-light" data-bs-toggle="tooltip" title="Decrease quantity" onclick="adjustQuantity(-1)">-</button>
+                                <input type="number" value="1" min="1" id="productQuantity" style="width: 50px;" readonly>
+                                <button class="btn btn-light" data-bs-toggle="tooltip" title="Increase quantity" onclick="adjustQuantity(1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="coupon">Apply Coupon</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="couponCode" placeholder="Enter coupon code">
+                            <button class="apply-coupon-btn" data-bs-toggle="tooltip" title="Apply discount" onclick="applyCoupon()">Apply</button>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 delivery-options">
+                        <p>Select Delivery Option:</p>
+                        <input type="radio" name="deliveryOption" id="standardDelivery" checked onclick="updateDeliveryFee(0)"> Standard Delivery (Free) - Arrives by <strong>Oct 6</strong><br>
+                        <input type="radio" name="deliveryOption" id="expressDelivery" onclick="updateDeliveryFee(50)"> Express Delivery (₹50) - Arrives by <strong>Oct 2</strong>
+                    </div>
+
+                    <p class="mt-3">Order confirmation email will be sent to 
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Enter your email ID" required>
+                            <button class="btn btn-secondary">Continue</button>
+                        </div>
+                    </p>
+                    
+                    // 
+
+
+
+
+                    <button id="wishlistBtn" class="wishlist-btn" onclick="addToWishlist()" data-bs-toggle="tooltip" title="Add to Wishlist">
+                        <i class="fas fa-heart"></i> Save to Wishlist
+                    </button>
+                    
+                    <!-- Gift Wrapping Option -->
+                    
+                    <!-- Gift Wrapping Option -->
+                    <div class="mt-3">
+                        <input type="checkbox" id="giftWrap" onclick="toggleGiftWrap()"> Add Gift Wrapping (₹30)
+                    </div>
+                    
+                    <!-- Gift Message Field -->
+                    <div class="mt-3" id="giftMessageContainer">
+                        <label for="giftMessage">Gift Message (optional)</label>
+                        <textarea id="giftMessage" class="form-control" rows="3" placeholder="Enter your gift message here"></textarea>
+                    </div>
+            
+
+                    <!-- Return Policy Section -->
+                    <div class="mt-3">
+                        <h6>Return Policy</h6>
+                        <p>You can return the product within 30 days of delivery. Please ensure the product is in original packaging and unused.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section: Price Summary -->
+        <div class="col-lg-4 col-md-12">
+            <div class="price-summary">
+                <h4>PRICE SUMMARY</h4>
+                <p>Subtotal: ₹<span id="subtotal">0</span></p>
+                <p>Discount: ₹<span id="discount"></span> (<span id="discountPercent"></span>%)</p> 
+                <p>Delivery Fee: ₹<span id="deliveryFee">0</span></p>
+                <p>Gift Wrapping: ₹<span id="giftWrapFee">0</span></p>
+                <hr>
+                <p class="total-payable">Total Payable: ₹<span id="totalPayable">0</span></p>
+                <button class="btn btn-primary w-100 mt-3" onclick="placeOrder()">Place Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script to handle interactions -->
+<script>
+    let price = 0;
+    let discount = 0;
+    let discountPercent = 0;
+    let deliveryFee = 0;
+    let giftWrapFee = 0;
+    let wishlistAdded = false;
+
+    // Get product details from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const productName = urlParams.get('name');
+    price = parseFloat(urlParams.get('price'));
+    const productDiscount = parseFloat(urlParams.get('discount')) || 0;
+    const productImage = urlParams.get('image');
+
+    // Set product details on page load
+    // Set product details on page load
+document.getElementById('productName').textContent = productName;
+document.getElementById('productPrice').textContent = `Price: ₹${price}`;
+document.getElementById('productImage').src = productImage;
+if (productDiscount > 0) {
+    discountPercent = productDiscount;
+    discount = price * (discountPercent / 100); // Use price instead of productPrice
+    document.getElementById('productDiscount').textContent = `Discount: ₹${discount.toFixed(2)} (${discountPercent}% off)`;
+}
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.getElementById('toast-container').appendChild(toast);
+    setTimeout(() => toast.remove(), 3000); // Remove after 3 seconds
+}
+
+
+    // Adjust product quantity
+    function adjustQuantity(value) {
+        const quantityInput = document.getElementById('productQuantity');
+        let quantity = parseInt(quantityInput.value);
+        quantity = Math.max(1, quantity + value);
+        quantityInput.value = quantity;
+        updateTotal();
+    }
+
+    // Apply coupon code
+    function applyCoupon() {
+    const couponCode = document.getElementById('couponCode').value;
+    if (couponCode === 'DISCOUNT10') {
+        discountPercent = 10; // Set the discount percent for future calculations
+        discount = (price * discountPercent / 100); // 10% discount per product
+    } else {
+        alert('Invalid coupon code');
+        discount = 0; // Reset discount if invalid
+    }
+    updateTotal(); // Recalculate total after applying coupon
+}
+
+
+    // Update delivery fee
+    function updateDeliveryFee(fee) {
+        deliveryFee = fee;
+        updateTotal();
+    }
+
+    // Toggle gift wrapping and display gift message if selected
+   
+function toggleGiftWrap() {
+    const isGiftWrapSelected = document.getElementById('giftWrap').checked;
+    giftWrapFee = isGiftWrapSelected ? 30 : 0;
+
+    // Show or hide the gift message field based on gift wrap selection
+    const giftMessageContainer = document.getElementById('giftMessageContainer');
+    giftMessageContainer.style.display = isGiftWrapSelected ? 'block' : 'none';
+
+    // Update total price
+    updateTotal();
+}
+
+
+    // Update total price
+    function updateTotal() {
+    const quantity = parseInt(document.getElementById('productQuantity').value);
+    const subtotal = price * quantity;
+    const totalDiscount = discount * quantity; // Apply discount to the total quantity
+    const total = subtotal - totalDiscount + deliveryFee + giftWrapFee;
+    
+    document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+    document.getElementById('discount').textContent = totalDiscount.toFixed(2); // Display total discount
+    document.getElementById('discountPercent').textContent = discountPercent;
+    document.getElementById('deliveryFee').textContent = deliveryFee;
+    document.getElementById('giftWrapFee').textContent = giftWrapFee;
+    document.getElementById('totalPayable').textContent = total.toFixed(2);
+}
+
+
+    // Place order
+    function placeOrder() {
+        alert('Order placed successfully!');
+    }
+
+    // Add product to wishlist
+    function addToWishlist() {
+        if (!wishlistAdded) {
+            alert('Added to wishlist!');
+            wishlistAdded = true;
+            document.getElementById('wishlistBtn').innerHTML = '<i class="fas fa-check"></i> Added to Wishlist';
+        }
+    }
+
+    // Initialize tooltips
+    document.addEventListener('DOMContentLoaded', function () {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+
+    // Initialize total price calculation on page load
+    updateTotal();
+</script>
+<div id="toast-container"></div>
+</body>
+</html>
