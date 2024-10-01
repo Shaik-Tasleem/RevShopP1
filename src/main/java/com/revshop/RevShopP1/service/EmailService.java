@@ -41,7 +41,6 @@ public class EmailService {
     public String generateOtp() {
         SecureRandom random = new SecureRandom();
         int otp = 100000 + random.nextInt(900000);  // Generate 6 digit OTP
-        System.out.println("Generated OTP: " + otp);  // Log the generated OTP
         return String.valueOf(otp);
     }
 
@@ -57,7 +56,6 @@ public class EmailService {
 
             // Store OTP for later verification
             otpStorage.put(toEmail, otp);
-            System.out.println("Stored OTP for " + toEmail + ": " + otp);  // Log the stored OTP
             return true;
         } catch (MailException e) {
             e.printStackTrace(); // Log the exception for debugging
@@ -68,7 +66,7 @@ public class EmailService {
     // Method to verify OTP
     public boolean verifyOtp(String email, String inputOtp) {
         String storedOtp = otpStorage.get(email);
-        System.out.println("Verifying OTP for " + email + ": Entered OTP = " + inputOtp + ", Stored OTP = " + storedOtp); // Log the verification details
+        
         return storedOtp != null && storedOtp.equals(inputOtp);
     }
 

@@ -10,17 +10,19 @@ import org.springframework.stereotype.Service;
 import com.revshop.RevShopP1.model.Category;
 import com.revshop.RevShopP1.repository.CategoryRepository;
 
-
 @Service
 public class CategoryService {
 	@Autowired
 	private CategoryRepository categoryRepo;
+
 	public void insertCategory(Category category) {
 		categoryRepo.save(category);
 	}
-	public List<Category> getAllCat(){
+
+	public List<Category> getAllCat() {
 		return categoryRepo.findAll();
 	}
+
 	public Category getCatBtId(Long id) {
 		return categoryRepo.findById(id).get();
 	}
@@ -28,16 +30,13 @@ public class CategoryService {
 	public void deleteCat(Long id) {
 		categoryRepo.deleteById(id);
 	}
-	
-	public List<String> getAllCategoryNames() {
-	    return categoryRepo.findAll().stream()
-	               .map(Category::getCategoryName) 
-	               .collect(Collectors.toList());
-	}
 
+	public List<String> getAllCategoryNames() {
+		return categoryRepo.findAll().stream().map(Category::getCategoryName).collect(Collectors.toList());
+	}
 
 	public List<Category> getCatByName(String categoryName) {
-	    return categoryRepo.findByCategoryName(categoryName); 
+		return categoryRepo.findByCategoryName(categoryName);
 	}
 
-	}
+}
