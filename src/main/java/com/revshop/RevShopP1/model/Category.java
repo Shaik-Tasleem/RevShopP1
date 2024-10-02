@@ -12,6 +12,7 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Category {
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int categoryId;
@@ -19,38 +20,48 @@ public class Category {
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Product> products; // This holds the collection of products
 
+ 
+     
+
+
 
 	public int getCategoryId() {
 		return categoryId;
 	}
+
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
 	}
 	
-	public Category(int categoryId, String categoryName) {
-		this.categoryId = categoryId;
-		this.categoryName = categoryName;
-	}
+
 	public String getCategoryName() {
 		return categoryName;
 	}
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
+
+
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+
+
 	public Category(int categoryId, String categoryName, List<Product> products) {
 		super();
 		this.categoryId = categoryId;
 		this.categoryName = categoryName;
 		this.products = products;
 	}
-	
-	public Category()
-	{
-		
-	}
-	
-	
-	
+
+    public Category()
+    {
+    	
+    }
 
 
 }

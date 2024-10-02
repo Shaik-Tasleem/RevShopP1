@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -191,5 +192,60 @@
             }
         });
     </script>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Product</title>
+</head>
+<body>
+    <h1>Add Product to Category</h1>
+    
+    <form th:action="@{/products/save}" method="post">
+        <!-- Hidden field to hold the category ID, passed from sellerdash -->
+        
+        <!-- Hidden field to hold the category ID -->
+		<input type="hidden" name="categoryId" th:value="${category.categoryId}" />
+        
+        <!-- Category name display (read-only) -->
+        <p><strong>Category:</strong> <span th:text="${category.categoryName}"></span></p>
+
+        <!-- Product name input -->
+        <label for="name">Product Name:</label>
+        <input type="text" id="name" name="productName" required>
+        <br>
+
+        <!-- Product description input this.id = id;
+		this.name = name;
+		this.description = description;
+		this.price = price;
+		this.imgurl = imgurl;
+		this.quantity = quantity;
+		this.active = active;-->
+        <label for="description">Description:</label>
+        <textarea id="description" name="productDescription" required></textarea>
+        <br>
+
+        <!-- Product price input -->
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" step="0.01" required>
+        <br>
+
+        <!-- Product image URL input -->
+        <label for="imgurl">Image URL:</label>
+        <input type="text" id="imgurl" name="image" required>
+        <br>
+
+        <!-- Product quantity input -->
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" required>
+        <br>
+
+        <!-- Product active checkbox -->
+        
+        <br>
+
+        <!-- Submit button -->
+        <button type="submit">Save Product</button>
+    </form>
 </body>
 </html>

@@ -1,7 +1,8 @@
 package com.revshop.RevShopP1.model;
 
-
-import jakarta.annotation.Nullable;
+ 
+import com.revshop.RevShopP1.model.Category;
+ 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,15 +14,13 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "product")
 public class Product {
-	
-	@Nullable
+  
     private Long sellerId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
-
-   
+ 
     private String productName;
     private String productDescription;
     private double price;
@@ -32,6 +31,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "categoryId", nullable = false) // Ensure this matches Category field
+
     private Category category; // Updated to reference the Category entity
 
 	public Long getSellerId() {
@@ -105,11 +105,7 @@ public class Product {
 	public void setImage(String image) {
 		this.image = image;
 	}
-
-	
-
-	
-
+ 
 	public Category getCategory() {
 		return category;
 	}
@@ -118,26 +114,11 @@ public class Product {
 		this.category = category;
 	}
 
-	public Product(Long sellerId, int productId, String productName, String productDescription, double price,
-			double discountPrice, int threshold, int quantity, String image) {
-		super();
-		this.sellerId = sellerId;
-		this.productId = productId;
-		this.productName = productName;
-		this.productDescription = productDescription;
-		this.price = price;
-		this.discountPrice = discountPrice;
-		this.threshold = threshold;
-		this.quantity = quantity;
-		this.image = image;
-		
-	}
 
     public Product()
     {
     	
-    }
-
+    } 
 	public Product(Long sellerId, int productId, String productName, String productDescription, double price,
 			double discountPrice, int threshold, int quantity, String image, Category category) {
 		super();
@@ -154,5 +135,6 @@ public class Product {
 	}
     
     
+ 
 	
 }
