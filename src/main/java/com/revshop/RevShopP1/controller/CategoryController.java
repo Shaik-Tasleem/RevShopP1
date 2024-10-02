@@ -57,13 +57,6 @@ public class CategoryController {
 		model.addAttribute("cat", cat);
 		return "category";
 	}
-
-//	@GetMapping("/select")
-//    public String showProductSelectForm(Model model) {
-//        List<String> productNames = service.getAllCategoryNames();
-//        model.addAttribute("productNames", productNames);
-//        return "productsearch"; // This should be the name of your HTML file
-//    }
 	@PostMapping("/select")
     public String selectcategory(@RequestParam String categoryName, Model model) {
         List<Category> category = service.getCatByName(categoryName);
