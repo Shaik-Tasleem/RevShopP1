@@ -54,7 +54,7 @@ public class BuyerControllerTest {
         mockMvc.perform(post("/ecom/buyerRegistration")
                .flashAttr("buyer", buyer))
                .andExpect(status().isOk())
-               .andExpect(view().name("indexPage"));
+               .andExpect(view().name("LoginPage"));
 
         verify(buyerService, times(1)).insertBuyer(buyer);
     }
@@ -125,7 +125,7 @@ public class BuyerControllerTest {
         when(buyerService.getBuyerDetailsByEmail(anyString())).thenReturn(mockBuyer);
         when(pwd_obj.hashPassword(anyString())).thenReturn("hashedPassword");
 
-        mockMvc.perform(post("/buyer/handleLogin")
+        mockMvc.perform(post("/ecom/buyer/handleLogin")
                .param("email", "test@example.com")
                .param("password", "password123")
                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
@@ -144,7 +144,7 @@ public class BuyerControllerTest {
         when(buyerService.getBuyerDetailsByEmail(anyString())).thenReturn(mockBuyer);
         when(pwd_obj.hashPassword(anyString())).thenReturn("wrongHashedPassword");
 
-        mockMvc.perform(post("/buyer/handleLogin")
+        mockMvc.perform(post("/ecom/buyer/handleLogin")
                .param("email", "test@example.com")
                .param("password", "wrongPassword")
                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
@@ -163,7 +163,7 @@ public class BuyerControllerTest {
         when(buyerService.getBuyerDetailsByMobileNumber(anyString())).thenReturn(mockBuyer);
         when(pwd_obj.hashPassword(anyString())).thenReturn("hashedPassword");
 
-        mockMvc.perform(post("/buyer/handleLogin")
+        mockMvc.perform(post("/ecom/buyer/handleLogin")
                .param("mobileNumber", "1234567890")
                .param("password", "password123")
                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
@@ -182,7 +182,7 @@ public class BuyerControllerTest {
         when(buyerService.getBuyerDetailsByMobileNumber(anyString())).thenReturn(mockBuyer);
         when(pwd_obj.hashPassword(anyString())).thenReturn("wrongHashedPassword");
 
-        mockMvc.perform(post("/buyer/handleLogin")
+        mockMvc.perform(post("/ecom/buyer/handleLogin")
                .param("mobileNumber", "1234567890")
                .param("password", "wrongPassword")
                .contentType(MediaType.APPLICATION_FORM_URLENCODED))

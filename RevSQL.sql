@@ -39,3 +39,6 @@ insert into categories(CategoryId,CategoryName) values(9,'VideosGames');
 insert into categories(CategoryId,CategoryName) values(10,'Furniture');
 insert into categories(CategoryId,CategoryName) values(11,'Laptops');
 insert into categories(CategoryId,CategoryName) values(12,'EarBuds');
+
+select * from buyer;
+select * from SPRING_SESSION_ATTRIBUTES;
