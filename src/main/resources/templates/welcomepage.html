@@ -374,11 +374,12 @@ button:hover {
 					alt="Login"></span> Login
 			</button>
 			</a>
-			<button class="cart-icon">
-				<img
-					src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg"
-					alt="Cart"> <span> Cart</span>
-			</button>
+			 <a th:href="@{/ecom/emptyCart}">
+        <button class="cart-icon">
+            <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg"
+                alt="Cart"> <span> Cart</span>
+        </button>
+    	</a>
 			<button class="account-icon">
 				<img
 					src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/Store-9eeae2.svg"

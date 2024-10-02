@@ -4,10 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.revshop.RevShopP1.model.Buyer;
-
-import jakarta.servlet.http.HttpSession;
-
 @Controller
 @RequestMapping("/ecom")
 public class FrontPagesController {
@@ -26,5 +22,9 @@ public class FrontPagesController {
 	@GetMapping("/ForgotPassword")
 	public String forgotPassword(Model model) {
 		return "ForgotPassword";
-	}
+    }
+    @GetMapping("/emptyCart")
+    public String emptyCartPage(Model model) {
+        return "emptyCart";
+    }
 }

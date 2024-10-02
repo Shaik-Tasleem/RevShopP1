@@ -20,6 +20,10 @@ public class ForgotPasswordController {
 	private String em="";
 	@Autowired
 	private ForgotService forgotService;
+	@GetMapping("/ForgotPassword")
+	public String showForgotPasswordPage(Model model) {
+	    return "ForgotPassword"; // This returns the forgot-password.html template
+	}
 	@PostMapping("/api/send-verification/forgot")
     @ResponseBody
     public String sendVerificationCode(@RequestParam("email") String email, HttpSession session) {
