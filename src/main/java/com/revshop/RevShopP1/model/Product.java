@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "product")
 public class Product {
-    private int sellerId;
+    private Long sellerId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +29,14 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "categoryId", nullable = false) // Ensure this matches Category field
+    
     private Category category; // Updated to reference the Category entity
 
-	public int getSellerId() {
+	public Long getSellerId() {
 		return sellerId;
 	}
 
-	public void setSellerId(int sellerId) {
+	public void setSellerId(Long sellerId) {
 		this.sellerId = sellerId;
 	}
 
@@ -111,7 +112,7 @@ public class Product {
 		this.category = category;
 	}
 
-	public Product(int sellerId, int productId, String productName, String productDescription, double price,
+	public Product(Long sellerId, int productId, String productName, String productDescription, double price,
 			double discountPrice, int threshold, int quantity, String image, Category category) {
 		super();
 		this.sellerId = sellerId;

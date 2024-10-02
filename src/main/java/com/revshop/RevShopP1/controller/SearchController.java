@@ -19,7 +19,7 @@ public class SearchController {
     private ProductService productService;
 
     // Search from welcome page using GET
-    @GetMapping("/welcomepage")
+    @GetMapping("/products/search") // Updated mapping
     public String showWelcomePage(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
         List<Product> products;
         
@@ -37,7 +37,7 @@ public class SearchController {
         
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword); // To retain the search keyword in the UI
-        return "welcomepage"; // Return to welcome page
+        return "Buyerdashboard"; // Return to welcome page
     }
 
     // Search from demo page using GET
@@ -55,12 +55,11 @@ public class SearchController {
                 // If no matching products are found, show all products
                 products = productService.getAllProducts();
             }
-           
         }
 
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword); // Retain the search keyword
-        return "searchproducts"; // Stay on the demo page
+        return "BuyerdashboardExtend"; // Stay on the demo page
     }
 
     // Post mapping for search on any page
@@ -84,6 +83,6 @@ public class SearchController {
         model.addAttribute("keyword", keyword); // Retain the search keyword
 
         // You can decide where to redirect based on which page the search is performed on
-        return "searchproducts"; // Render the results on a common search results page
+        return "BuyerdashboardExtend"; // Render the results on a common search results page
     }
 }

@@ -565,21 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Add click events for Account and Cart buttons
-    const accountBtn = document.querySelector('.account-icon');
-    const cartBtn = document.querySelector('.cart-icon');
-
-    if (accountBtn) {
-        accountBtn.addEventListener('click', () => {
-            alert('Account Button Clicked!');
-        });
-    }
-
-    if (cartBtn) {
-        cartBtn.addEventListener('click', () => {
-            alert('Cart Button Clicked!');
-        });
-    }
+  
 
     // Intersection Observer for product cards and animated elements
     const observer = new IntersectionObserver((entries) => {
