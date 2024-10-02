@@ -48,5 +48,9 @@ public class BuyerService {
 	public Buyer getBuyerDetailsByMobileNumber(String mobileNumber) {
 		return buyerRepo.findByMobileNumber(mobileNumber);
 	}
-
+	public void updateBuyerPassword(String email, String newPassword) throws NoSuchAlgorithmException {
+        Buyer buyer = buyerRepo.findByEmail(email);
+        buyer.setPassword(newPassword);
+        buyerRepo.save(buyer);
+    }
 }

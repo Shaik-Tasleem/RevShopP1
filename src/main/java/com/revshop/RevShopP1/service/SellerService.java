@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.revshop.RevShopP1.model.Buyer;
 import com.revshop.RevShopP1.model.Seller;
 import com.revshop.RevShopP1.repository.SellerRepository;
 import com.revshop.RevShopP1.utils.PasswordUtils;
@@ -56,5 +55,11 @@ public class SellerService {
 	public Seller getSellerDetailsByMobileNumber(String mobileNumber) {
 
 		return sellerRepo.findByMobileNumber(mobileNumber);
+	}
+
+	public void updateSellerPassword(String em, String hashPassword) {
+		Seller seller=sellerRepo.findByEmail(em);
+		seller.setPassword(hashPassword);
+		sellerRepo.save(seller);
 	}
 }

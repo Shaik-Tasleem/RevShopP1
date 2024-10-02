@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name="seller")
 public class Seller implements Serializable{
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long sellerId;

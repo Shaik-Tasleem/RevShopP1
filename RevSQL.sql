@@ -24,38 +24,23 @@ CREATE TABLE SPRING_SESSION_ATTRIBUTES (
     REFERENCES SPRING_SESSION(PRIMARY_ID) ON DELETE CASCADE
 );
 create table Category(
-CategoryId int not null primary key auto_increment,
-CategoryName varchar(200) not null
+categoryId int not null primary key auto_increment,
+categoryName varchar(200) not null
 );
-<<<<<<< HEAD
-insert into categories(CategoryId,CategoryName) values(1,'Tshirts');
-insert into categories(CategoryId,CategoryName) values(2,'Toys');
-insert into categories(CategoryId,CategoryName) values(3,'Shirts');
-insert into categories(CategoryId,CategoryName) values(4,'Toys');
-insert into categories(CategoryId,CategoryName) values(5,'WashingMachine');
-insert into categories(CategoryId,CategoryName) values(6,'Hoodies');
-insert into categories(CategoryId,CategoryName) values(7,'Printers');
-insert into categories(CategoryId,CategoryName) values(8,'Books');
-insert into categories(CategoryId,CategoryName) values(9,'VideosGames');
-insert into categories(CategoryId,CategoryName) values(10,'Furniture');
-insert into categories(CategoryId,CategoryName) values(11,'Laptops');
-insert into categories(CategoryId,CategoryName) values(12,'EarBuds');
-
 select * from buyer;
 select * from SPRING_SESSION_ATTRIBUTES;
-=======
-insert into Category(CategoryId,CategoryName) values(1,'Tshirts');
-insert into Category(CategoryId,CategoryName) values(2,'Toys');
-insert into Category(CategoryId,CategoryName) values(3,'Shirts');
-insert into Category(CategoryId,CategoryName) values(4,'Toys');
-insert into Category(CategoryId,CategoryName) values(5,'WashingMachine');
-insert into Category(CategoryId,CategoryName) values(6,'Hoodies');
-insert into Category(CategoryId,CategoryName) values(7,'Printers');
-insert into Category(CategoryId,CategoryName) values(8,'Books');
-insert into Category(CategoryId,CategoryName) values(9,'VideosGames');
-insert into Category(CategoryId,CategoryName) values(10,'Furniture');
-insert into Category(CategoryId,CategoryName) values(11,'Laptops');
-insert into Category(CategoryId,CategoryName) values(12,'EarBuds');
+insert into Category(categoryId,categoryName) values(1,'Tshirts');
+insert into Category(categoryId,categoryName) values(2,'Toys');
+insert into Category(categoryId,categoryName) values(3,'Shirts');
+insert into Category(categoryId,categoryName) values(4,'Toys');
+insert into Category(categoryId,categoryName) values(5,'WashingMachine');
+insert into Category(categoryId,categoryName) values(6,'Hoodies');
+insert into Category(categoryId,categoryName) values(7,'Printers');
+insert into Category(categoryId,categoryName) values(8,'Books');
+insert into Category(categoryId,categoryName) values(9,'VideosGames');
+insert into Category(categoryId,categoryName) values(10,'Furniture');
+insert into Category(categoryId,categoryName) values(11,'Laptops');
+insert into Category(categoryId,categoryName) values(12,'EarBuds');
 
-desc Category;
->>>>>>> 5cb474e6bab3633fb280e27b905c933469afaf84
+select * from buyer;
+
