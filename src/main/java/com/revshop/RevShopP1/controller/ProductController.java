@@ -39,7 +39,7 @@ public class ProductController {
 
     // When a particular item is selected from search results
     @GetMapping("/{id}")
-    public String showProduct(@PathVariable int id, Model model) {
+    public String showProduct(@PathVariable Long id, Model model) {
         Product product = productService.getProductById(id);
         model.addAttribute("product", product);
         
@@ -50,7 +50,7 @@ public class ProductController {
     
     // Displaying the products as per category id from buyer dashboard
     @GetMapping("/category/{categoryId}")
-    public String showProductsByCategory(@PathVariable int categoryId, Model model) {
+    public String showProductsByCategory(@PathVariable Long categoryId, Model model) {
         List<Product> products = productService.getProductsByCategoryId(categoryId);
         model.addAttribute("products", products);
         return "BuyerdashboardExtend";  // HTML page to display the products
@@ -64,7 +64,7 @@ public class ProductController {
 
     // Show the add product form based on category ID
     @GetMapping("/add")
-    public String showAddProductForm(@RequestParam("categoryId") int categoryId, Model model) {
+    public String showAddProductForm(@RequestParam("categoryId") Long categoryId, Model model) {
         Category category = categoryService.getCategoryById(categoryId); // Fetch the category by ID
         model.addAttribute("category", category); // Add category to the model
         model.addAttribute("product", new Product()); // Add an empty product object for the form
@@ -73,7 +73,7 @@ public class ProductController {
 
     // Save product in the selected category
     @PostMapping("/save")
-    public String saveProduct(@ModelAttribute Product product, @RequestParam("categoryId") int categoryId) {
+    public String saveProduct(@ModelAttribute Product product, @RequestParam("categoryId") Long categoryId) {
         // Fetch the category by ID and set it to the product
         Category category = categoryService.getCategoryById(categoryId);
         product.setCategory(category);

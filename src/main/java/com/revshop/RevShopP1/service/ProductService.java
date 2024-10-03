@@ -25,7 +25,7 @@ public class ProductService {
     }
 
     // Get a product by its ID, handling the case where it might not be found
-    public Product getProductById(int productId) {
+    public Product getProductById(Long productId) {
         Optional<Product> productOptional = productRepository.findById(productId);
         if (productOptional.isPresent()) {
             return productOptional.get();
@@ -36,7 +36,7 @@ public class ProductService {
     }
 
     // Get products by category ID
-    public List<Product> getProductsByCategoryId(int categoryId) {
+    public List<Product> getProductsByCategoryId(Long categoryId) {
         return productRepository.findByCategory_CategoryId(categoryId);
     }
 

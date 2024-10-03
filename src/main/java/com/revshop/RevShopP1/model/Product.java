@@ -14,12 +14,12 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "product")
 public class Product {
-	@Nullable
+	
     private Long sellerId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int productId;
+    private Long productId;
 
     private String productName;
     private String productDescription;
@@ -42,11 +42,11 @@ public class Product {
 		this.sellerId = sellerId;
 	}
 
-	public int getProductId() {
+	public Long getProductId() {
 		return productId;
 	}
 
-	public void setProductId(int productId) {
+	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
 
@@ -114,7 +114,7 @@ public class Product {
 		this.category = category;
 	}
 
-	public Product(Long sellerId, int productId, String productName, String productDescription, double price,
+	public Product(Long sellerId, Long productId, String productName, String productDescription, double price,
 			double discountPrice, int threshold, int quantity, String image, Category category) {
 		super();
 		this.sellerId = sellerId;

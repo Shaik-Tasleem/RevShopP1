@@ -15,7 +15,7 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     // Get category by its ID, returning an exception if not found
-    public Category getCategoryById(int id) {
+    public Category getCategoryById(Long id) {
         return categoryRepository.findById(id).orElseThrow(() -> 
             new RuntimeException("Category not found with id: " + id));
     }

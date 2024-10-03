@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.revshop.RevShopP1.model.Category;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Integer> {
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     // Custom query to find a category by its name
     Category findByCategoryName(String categoryName);
