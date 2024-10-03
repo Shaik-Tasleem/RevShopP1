@@ -48,5 +48,6 @@ public class BuyerService {
 	public Buyer getBuyerDetailsByMobileNumber(String mobileNumber) {
 		return buyerRepo.findByMobileNumber(mobileNumber);
 	}
+	
 
 }
