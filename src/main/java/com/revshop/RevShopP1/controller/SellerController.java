@@ -106,4 +106,8 @@ public class SellerController {
             return "redirect:/ecom/SellerDashboard";
         }
     }
+    @GetMapping("/SellerDashboard")
+    public String diplaySellerDashboard() {
+    	return "SellerDashboard";
+    }
 }

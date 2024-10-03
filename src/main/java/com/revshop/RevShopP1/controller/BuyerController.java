@@ -98,4 +98,8 @@ public class BuyerController {
             return "redirect:/ecom/buyerdashboard";
         }
     }
+    @GetMapping("/buyerdashboard")
+    public String displayBuyerDashboard() {
+    	return "buyerdashboard";
+    }
 }
