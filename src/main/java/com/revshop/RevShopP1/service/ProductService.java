@@ -2,6 +2,9 @@ package com.revshop.RevShopP1.service;
 
 import com.revshop.RevShopP1.model.Product;
 import com.revshop.RevShopP1.repository.ProductRepository;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,5 +46,26 @@ public class ProductService {
     // Save the product to the database
     public void save(Product product) {
         productRepository.save(product);
+    }
+
+	public List<Product> getProductsBySellerId(Long sellerIdLong) {
+		return productRepository.findProductsBySellerId(sellerIdLong);
+	}
+
+	public void deleteProductById(Long productId) {
+		productRepository.deleteById(productId);
+	}
+
+	@Transactional
+    public void updateProduct(Long productId, Product updatedProduct) {
+        productRepository.updateProduct(
+            productId,
+            updatedProduct.getProductName(),
+            updatedProduct.getProductDescription(),
+            updatedProduct.getPrice(),
+            updatedProduct.getDiscountPrice(),
+            updatedProduct.getQuantity(),
+            updatedProduct.getImage()
+        );
     }
 }

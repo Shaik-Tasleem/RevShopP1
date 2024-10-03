@@ -3,8 +3,11 @@ package com.revshop.RevShopP1.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -108,5 +111,25 @@ public class ProductController {
         
         // Redirect back to the dashboard after saving
         return "SellerDashboard";
+    }
+    @DeleteMapping("/delete/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
+        try {
+            productService.deleteProductById(productId); // Assuming this service method deletes the product
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete product.");
+        }
+    }
+    @GetMapping("/edit/{productId}")
+    public String showUpdateForm(@PathVariable("productId") Long productId, Model model) {
+        Product product = productService.getProductById(productId);
+        model.addAttribute("product", product);
+        return "updateProduct"; // This will load the updateProduct.html page
+    }
+    @PostMapping("/update/{productId}")
+    public String updateProduct(@PathVariable("productId") Long productId, @ModelAttribute("product") Product updatedProduct) {
+        productService.updateProduct(productId, updatedProduct);
+        return "redirect:/ecom/manage"; // Redirect back to manage products after update
     }
 }

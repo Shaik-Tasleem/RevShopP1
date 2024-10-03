@@ -1,5 +1,6 @@
 package com.revshop.RevShopP1.controller;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.revshop.RevShopP1.model.Seller;
+import com.revshop.RevShopP1.model.*;
 import com.revshop.RevShopP1.service.EmailService;
+import com.revshop.RevShopP1.service.ProductService;
 import com.revshop.RevShopP1.service.SellerService;
 import com.revshop.RevShopP1.utils.PasswordUtils;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
@@ -33,7 +36,9 @@ public class SellerController {
 
     @Autowired
     private EmailService emailService;
-
+    
+    @Autowired
+    private ProductService productService;
     // Initialize seller session attribute
     @ModelAttribute("seller")
     public Seller getSeller() {
@@ -109,5 +114,36 @@ public class SellerController {
     public String diplaySellerDashboard() {
     	return "SellerDashboard";
     }
+    
+    @GetMapping("/manage")
+    public String showSellerProducts(HttpServletRequest request, Model model) {
+        // Retrieve sellerId from the cookies
+        String sellerId = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("sellerId")) {
+                    sellerId = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        // If sellerId is null, redirect to the login page
+        if (sellerId == null) {
+            return "redirect:/ecom/LoginPage";
+        }
+
+        // Fetch products associated with this seller
+        Long sellerIdLong = Long.parseLong(sellerId);
+        List<Product> products = productService.getProductsBySellerId(sellerIdLong);
+
+        // Add products to the model
+        model.addAttribute("products", products);
+
+        // Return the product management view
+        return "manageProducts";
+    }
+
 }
 
