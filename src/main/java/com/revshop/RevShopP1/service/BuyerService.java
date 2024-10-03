@@ -43,6 +43,7 @@ public class BuyerService {
         return null; // Or throw an exception if the buyer doesn't exist
     }
 	public Buyer getBuyerDetailsByEmail(String email) {
+		System.out.println(buyerRepo.findByEmail(email));
 		return buyerRepo.findByEmail(email);
 	}
 	public Buyer getBuyerDetailsByMobileNumber(String mobileNumber) {

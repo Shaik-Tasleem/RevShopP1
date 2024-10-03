@@ -35,8 +35,6 @@ public class Buyer implements Serializable {
 	private int postalCode;
 	private String state;
 	private String country;
-//	@OneToMany(mappedBy="comment",cascade=CascadeType.ALL)
-//	private List<Product> products=new ArrayList<>();
 	public Long getBuyerId() {
 		return buyerId;
 	}

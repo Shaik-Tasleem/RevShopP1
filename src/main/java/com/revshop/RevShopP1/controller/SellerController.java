@@ -13,16 +13,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.revshop.RevShopP1.model.Seller;
 import com.revshop.RevShopP1.service.EmailService;
 import com.revshop.RevShopP1.service.SellerService;
 import com.revshop.RevShopP1.utils.PasswordUtils;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+
 @Controller
 @RequestMapping("/ecom")
-@SessionAttributes("seller") // Managing the seller session attribute
 public class SellerController {
 
     @Autowired
@@ -82,9 +83,10 @@ public class SellerController {
     public String sellerLogin(@RequestParam(required = false) String email,
                               @RequestParam(required = false) String mobileNumber, 
                               @RequestParam String password, 
-                              Model model) throws NoSuchAlgorithmException {
+                              Model model,
+                              HttpServletResponse response) throws NoSuchAlgorithmException {
         Seller seller_obj = null;
-
+        
         if (email != null) {
             seller_obj = sellerService.getSellerDetailsByEmail(email);
         } else if (mobileNumber != null) {
@@ -96,8 +98,14 @@ public class SellerController {
             model.addAttribute("errorMessage", msg);
             return "LoginPage";
         } else {
-            model.addAttribute("seller", seller_obj); // Store seller in session
-            return "SellerDashboard"; // Redirect to seller dashboard
+            // Store seller ID in a cookie
+            Cookie sellerCookie = new Cookie("sellerId", seller_obj.getSellerId().toString());
+            sellerCookie.setPath("/");
+            sellerCookie.setMaxAge(24 * 60 * 60); // Expires in 1 day
+            sellerCookie.setHttpOnly(true); // Cookie is only accessible by the server
+            response.addCookie(sellerCookie);
+
+            return "redirect:/ecom/SellerDashboard"; // Redirect to seller dashboard
         }
     }
 }

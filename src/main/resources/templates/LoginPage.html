@@ -212,57 +212,59 @@
         </script>
     </div>
     <script>
-        function toggleInput() {
-            var emailInput = document.getElementById("emailInput");
-            var phoneInput = document.getElementById("phoneInput");
-            var emailField = document.getElementById("email");
-            var mobileField = document.getElementById("mobileNumber");
-            var toggleText = document.getElementById("toggleText");
+    // Toggle between email and phone inputs
+    function toggleInput() {
+        var emailInput = document.getElementById("emailInput");
+        var phoneInput = document.getElementById("phoneInput");
+        var emailField = document.getElementById("email");
+        var mobileField = document.getElementById("mobileNumber");
+        var toggleText = document.getElementById("toggleText");
 
-            if (emailInput.style.display === "none") {
-                emailInput.style.display = "block";
-                phoneInput.style.display = "none";
-                toggleText.innerText = "Use Phone Number";
-                emailField.disabled = false;
-                mobileField.disabled = true;
-            } else {
-                emailInput.style.display = "none";
-                phoneInput.style.display = "flex";
-                toggleText.innerText = "Use Email ID";
-                emailField.disabled = true;
-                mobileField.disabled = false;
-            }
+        if (emailInput.style.display === "none") {
+            emailInput.style.display = "block";
+            phoneInput.style.display = "none";
+            toggleText.innerText = "Use Phone Number";
+            emailField.disabled = false;
+            mobileField.disabled = true;
+        } else {
+            emailInput.style.display = "none";
+            phoneInput.style.display = "flex";
+            toggleText.innerText = "Use Email ID";
+            emailField.disabled = true;
+            mobileField.disabled = false;
         }
+    }
 
-        function switchTab(tab) {
-            var buyerTab = document.getElementById("buyerTab");
-            var sellerTab = document.getElementById("sellerTab");
-            var loginTitle = document.getElementById("loginTitle");
-            var loginButton = document.getElementById("loginButton");
-            var registrationLink = document.getElementById("registrationLink");
-            var forgotLink=document.getElementById("ForgotPassword");
-            var identity = document.getElementById("identity");
+    // Switch between Buyer and Seller tabs and ensure the form action is set correctly
+    function switchTab(tab) {
+        var buyerTab = document.getElementById("buyerTab");
+        var sellerTab = document.getElementById("sellerTab");
+        var loginTitle = document.getElementById("loginTitle");
+        var loginButton = document.getElementById("loginButton");
+        var registrationLink = document.getElementById("registrationLink");
+        var forgotLink = document.getElementById("forgotLink"); // Correct ID for forgot password link
+        var identity = document.getElementById("identity"); // The form element
 
-            if (tab === 'buyer') {
-                buyerTab.classList.add("active");
-                sellerTab.classList.remove("active");
-                loginTitle.innerText = "Buyer Login - Enter Email/Mobile number";
-                loginButton.innerText = "Login";
-                registrationLink.href = "/ecom/buyerRegistration";
-                forgotLink.href="/ecom/ForgotPassword?userType=buyer"
-                identity.action = "/ecom/buyer/handleLogin";
-                registrationLink.innerText = "Don't have an account? Register";
-            } else {
-                sellerTab.classList.add("active");
-                buyerTab.classList.remove("active");
-                loginTitle.innerText = "Seller Login - Enter Email/Mobile number";
-                loginButton.innerText = "Login";
-                registrationLink.href = "/ecom/sellerRegistration";
-                forgotLink.href="/ecom/ForgotPassword?userType=seller";
-                identity.action = "/ecom/seller/handleLogin";
-                registrationLink.innerText = "Don't have an account? Register";
-            }
+        if (tab === 'buyer') {
+            buyerTab.classList.add("active");
+            sellerTab.classList.remove("active");
+            loginTitle.innerText = "Buyer Login - Enter Email/Mobile number";
+            loginButton.innerText = "Login";
+            registrationLink.href = "/ecom/buyerRegistration";
+            forgotLink.href = "/ecom/ForgotPassword?userType=buyer";
+            identity.setAttribute("action", "/ecom/buyer/handleLogin"); // Update form action for buyer
+            registrationLink.innerText = "Don't have an account? Register";
+        } else if (tab === 'seller') {
+            sellerTab.classList.add("active");
+            buyerTab.classList.remove("active");
+            loginTitle.innerText = "Seller Login - Enter Email/Mobile number";
+            loginButton.innerText = "Login";
+            registrationLink.href = "/ecom/sellerRegistration";
+            forgotLink.href = "/ecom/ForgotPassword?userType=seller";
+            identity.setAttribute("action", "/ecom/seller/handleLogin"); // Update form action for seller
+            registrationLink.innerText = "Don't have an account? Register";
         }
+    }
     </script>
 </body>
 </html>
