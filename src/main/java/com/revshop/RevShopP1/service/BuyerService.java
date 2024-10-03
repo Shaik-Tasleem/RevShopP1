@@ -40,7 +40,7 @@ public class BuyerService {
             return buyerRepo.save(buyer); 
         }
         
-        return null; // Or throw an exception if the buyer doesn't exist
+        return null; 
     }
 	public Buyer getBuyerDetailsByEmail(String email) {
 		System.out.println(buyerRepo.findByEmail(email));

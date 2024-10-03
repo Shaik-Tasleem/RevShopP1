@@ -70,7 +70,6 @@ public class BuyerController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP.");
         }
     }
-
     @PostMapping("/buyer/handleLogin")
     public String buyerLogin(@RequestParam(required = false) String email,
                              @RequestParam(required = false) String mobileNumber,

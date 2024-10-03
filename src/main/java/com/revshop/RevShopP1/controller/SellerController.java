@@ -58,14 +58,12 @@ public class SellerController {
     public ResponseEntity<String> sendVerificationEmail(@RequestParam("email") String sellerEmail) {
         String otp = emailService.generateOtp();
         boolean emailSent = emailService.sendEmail(sellerEmail, otp);
-
         if (emailSent) {
             return ResponseEntity.ok("OTP sent successfully.");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send OTP.");
         }
-    }
-
+	}
     @PostMapping("/api/verify-codeseller")
     @ResponseBody
     public ResponseEntity<String> verifyOtp(@RequestParam("email") String sellerEmail,
@@ -105,7 +103,7 @@ public class SellerController {
             sellerCookie.setHttpOnly(true); // Cookie is only accessible by the server
             response.addCookie(sellerCookie);
 
-            return "redirect:/ecom/SellerDashboard"; // Redirect to seller dashboard
+            return "redirect:/ecom/SellerDashboard";
         }
     }
 }
