@@ -79,7 +79,7 @@ public class BuyerController {
 			if (buyer_obj == null || !buyer_obj.getPassword().equals(pwd_obj.hashPassword(password))) {
 				String msg = "Invalid Email or Password...\nIf you are a new user Kindly...Register..\nTo access our Services..";
 				model.addAttribute("errorMessage", msg);
-				return "LoginPage";
+				return "buyerdashboard";
 			} else {
 				session.setAttribute("buyer", buyer_obj);
 				return "LoginPage";

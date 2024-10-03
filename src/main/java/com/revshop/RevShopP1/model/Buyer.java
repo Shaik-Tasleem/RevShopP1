@@ -18,7 +18,15 @@ import jakarta.persistence.Table;
 public class Buyer implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
+	private List<Product> products = new ArrayList<>();
+	private List<Orders> orders = new ArrayList<>();
+	private List<Wishlist> wishlist = new ArrayList<>();
+	private List<Payments> payments = new ArrayList<>();
+	private List<Cart> cart= new ArrayList<>();
+
 	private Long buyerId;
+	
 	
 	private String firstName;
 	private String lastName;
@@ -33,8 +41,6 @@ public class Buyer implements Serializable {
 	private int postalCode;
 	private String state;
 	private String country;
-//	@OneToMany(mappedBy="comment",cascade=CascadeType.ALL)
-//	private List<Product> products=new ArrayList<>();
 	public Long getBuyerId() {
 		return buyerId;
 	}

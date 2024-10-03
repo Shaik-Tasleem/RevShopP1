@@ -77,7 +77,7 @@ public class SellerController {
 			if (seller_obj == null || !seller_obj.getPassword().equals(pwd_obj.hashPassword(password))) {
 				String msg = "Invalid Email or Password...\nIf you are a new user Kindly...Register..\nTo access our Services..";
 				model.addAttribute("errorMessage", msg);
-				return "LoginPage";
+				return "";
 			} else {
 				session.setAttribute("buyer", seller_obj);
 				return "LoginPage";

@@ -1,6 +1,8 @@
 package com.revshop.RevShopP1.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.*;
 @Entity
@@ -8,6 +10,11 @@ import jakarta.persistence.*;
 public class Seller implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+	private List<Product> products = new ArrayList<>();
+	private List<Payments> payments = new ArrayList<>();
+	private List<Orders> orders = new ArrayList<>();
+	private List<Cart> cart = new ArrayList<>();
 	private Long sellerId;
 	private String firstName;
 	private String lastName;
