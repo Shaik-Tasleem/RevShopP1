@@ -62,4 +62,9 @@ public class SellerService {
 		seller.setPassword(hashPassword);
 		sellerRepo.save(seller);
 	}
+
+	public Seller findById(Long double1) {
+		// TODO Auto-generated method stub
+		return sellerRepo.findById(double1).get();
+	}
 }

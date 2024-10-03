@@ -118,11 +118,10 @@
             
             <form th:action="@{/products/save}" method="post" th:object="${product}">
                 <!-- Hidden Seller ID -->
-               <input type="hidden" th:field="*{sellerId}" />
+               <input  th:name="sellerId" th:value="${seller.sellerId}" />
                 
                 <!-- Hidden Category ID -->
-               <input type="hidden" name="categoryId" th:value="${category.categoryId}" />
-
+               <input  th:name="categoryId" th:value="${category.categoryId}" />
 
 
                 <div class="row">
