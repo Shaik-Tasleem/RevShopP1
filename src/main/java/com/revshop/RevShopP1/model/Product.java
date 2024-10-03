@@ -2,6 +2,7 @@ package com.revshop.RevShopP1.model;
 
 import com.revshop.RevShopP1.model.Category;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +14,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "product")
 public class Product {
+	@Nullable
     private Long sellerId;
 
     @Id
