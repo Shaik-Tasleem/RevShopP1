@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Commerce Homepage</title>
+    <title>RevShop</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -48,7 +48,7 @@ input[type="text"] {
     padding: 10px 20px; /* Padding inside the input */
     font-size: 16px; /* Font size for text inside input */
     outline: none; /* Removes the default outline */
-    width: 50%; /* Adjust width of the search box */
+    width: 680px; /* Adjust width of the search box */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -102,7 +102,7 @@ nav ul li {
     position: absolute;
     background-color: #fff;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Slight shadow for dropdown */
-    border-radius: 80px;
+    
     padding: 10px 0;
     min-width: 200px;
     right: 0;
@@ -385,8 +385,14 @@ footer {
 <body>
     <header>
         <div class="logo"><img src="http://127.0.0.1:5500/images/revshop-logo.png"><span></span></div>
-        <input type="text" placeholder="Search for products, brands, and more" />
-        <nav></nav>
+      
+        <form action="/search" method="post">
+            <input type="text" name="keyword" placeholder="Search for products..." 
+                   th:value="${keyword}" /><span></span>
+            
+            <button type="submit" class="btn btn-light"> <i class="fa-solid fa-magnifying-glass"></i></button>
+            </form> </div>
+       
         <div class="account-cart">
             <div class="dropdown">
                 <button class="account-icon">
@@ -414,13 +420,13 @@ footer {
                 <div class="carousel-inner">
                     <div class="carousel-item active">
 
-                        <a href="Shoes.html"><img src="https://cmsimages.shoppersstop.com/main_banner_web_skechers_Reebok_4b074b3488/main_banner_web_skechers_Reebok_4b074b3488.png" class="d-block w-100" alt="Deals"></a>
+                        <a href="category/26"><img src="https://cmsimages.shoppersstop.com/main_banner_web_skechers_Reebok_4b074b3488/main_banner_web_skechers_Reebok_4b074b3488.png" class="d-block w-100" alt="Deals"></a>
                     </div>
                     <div class="carousel-item">
-                        <a href="Fashioncat.html"><img src="https://cmsimages.shoppersstop.com/main_strapi_web_ff1a52cb76/main_strapi_web_ff1a52cb76.png" class="d-block w-100" alt="Fashion"></a>
+                        <a href="category/13"><img src="https://cmsimages.shoppersstop.com/main_strapi_web_ff1a52cb76/main_strapi_web_ff1a52cb76.png" class="d-block w-100" alt="Fashion"></a>
                     </div>
                     <div class="carousel-item">
-                       <a href="Watches.html"> <img src="https://cmsimages.shoppersstop.com/main_banner_web_Fossil_michael_kors_and_more_a12056fe6e/main_banner_web_Fossil_michael_kors_and_more_a12056fe6e.png" class="d-block w-100" alt="Watches"> </a>
+                       <a href="category/25"> <img src="https://cmsimages.shoppersstop.com/main_banner_web_Fossil_michael_kors_and_more_a12056fe6e/main_banner_web_Fossil_michael_kors_and_more_a12056fe6e.png" class="d-block w-100" alt="Watches"> </a>
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -439,31 +445,31 @@ footer {
             <h2>Popular Categories</h2>
             <div class="category-grid">
                 <div class="category">
-                  <a href="Tv.html">  <img src="https://cdn.pixabay.com/photo/2020/11/23/06/21/television-5768804_640.png" alt="TV"> </a>
+                  <a href="category/1">  <img src="https://cdn.pixabay.com/photo/2020/11/23/06/21/television-5768804_640.png" alt="TV"> </a>
                 </div>
                 <div class="category">
-                  <a href=" Tshirts.html">  <img src="https://5.imimg.com/data5/MU/YU/OX/SELLER-86913833/rbvagfx2ckqaipnfaakcuzvvbko836-jpg.jpg "   alt="Tshirts"></a>
+                  <a href="category/13">  <img src="https://5.imimg.com/data5/MU/YU/OX/SELLER-86913833/rbvagfx2ckqaipnfaakcuzvvbko836-jpg.jpg "   alt="shirts"></a>
                 </div>
                 <div class="category">
-                  <a href="Washingmachine.html">  <img src="https://media3.bsh-group.com/Images/450x/19425132_Siemens_Home_Appliances_Brand_Reshape_Laundry_Care_Washin_Machines_Mobile_Stage_9_16.jpg" alt="washing machine"></a>
+                  <a href="category/9">  <img src="https://media3.bsh-group.com/Images/450x/19425132_Siemens_Home_Appliances_Brand_Reshape_Laundry_Care_Washin_Machines_Mobile_Stage_9_16.jpg" alt="washing machine"></a>
                 </div>
                 <div class="category">
-                   <a href="Hoodies.html"> <img src="https://www.siatex.com/wp-content/uploads/2024/02/Hoodies-Manufacturer-in-Bangladesh-550x550.jpeg.webp " alt="hoddies"> </a>
+                   <a href="category/11"> <img src="https://www.siatex.com/wp-content/uploads/2024/02/Hoodies-Manufacturer-in-Bangladesh-550x550.jpeg.webp " alt="hoddies"> </a>
                 </div>
                 <div class="category">
-                   <a href="Printer.html"> <img src="https://www.trustedreviews.com/wp-content/uploads/sites/54/2022/07/Canon_PIXMA_G650_front_side-scaled.jpg" alt="printers"></a>
+                   <a href="category/20"> <img src="https://www.trustedreviews.com/wp-content/uploads/sites/54/2022/07/Canon_PIXMA_G650_front_side-scaled.jpg" alt="printers"></a>
                 </div>
                 <div class="category">
-                    <a href="Books.html"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRla8erNGY2vUNsn9XyHiRQ0ri686Y3BMXkXA&s" alt="Books"></a>
+                    <a href="category/8"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRla8erNGY2vUNsn9XyHiRQ0ri686Y3BMXkXA&s" alt="Books"></a>
                 </div>
                 <div class="category">
-                 <a href="Videogames.html">   <img src="https://media.cnn.com/api/v1/images/stellar/prod/i-stock-1287493837-1.jpg?q=h_1194,w_2121,x_0,y_0" alt="video games"></a>
+                 <a href="category/15">   <img src="https://media.cnn.com/api/v1/images/stellar/prod/i-stock-1287493837-1.jpg?q=h_1194,w_2121,x_0,y_0" alt="video games"></a>
                 </div>
                 <div class="category">
-                    <a href="SmartPhones.html"><img src="https://www.cnet.com/a/img/resize/be75693d76fa05d221c69eab339bc6b7165d9ae3/hub/2023/07/05/dbbaffb7-80be-44be-9d79-c88ac856d36a/5g6a9290.jpg?auto=webp&fit=crop&height=675&width=1200" alt="smartphones"></a>
+                    <a href="category/2"><img src="https://www.cnet.com/a/img/resize/be75693d76fa05d221c69eab339bc6b7165d9ae3/hub/2023/07/05/dbbaffb7-80be-44be-9d79-c88ac856d36a/5g6a9290.jpg?auto=webp&fit=crop&height=675&width=1200" alt="smartphones"></a>
                 </div>
                 <div class="category">
-                  <a href="Furniture.html">  <img src="https://www.realsimple.com/thmb/kRRAaK6XhZIqL_GFIxfZzHTHx7o=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/furniture-styles-GettyImages-1467984982-512fed4077b646eabbc187619554d517.jpg" alt="Furniture"></a>
+                  <a href="category/14">  <img src="https://images-cdn.ubuy.co.in/6356b3a5c2926a7d140892e4-a-beautiful-high-quality-living-room.jpg" alt="Furniture"></a>
                 </div>
             </div>
         </section>
@@ -473,7 +479,7 @@ footer {
         <center>
 
             
-                <a href="Speaker.html" class="image-button">
+                <a href="category/24" class="image-button">
         
                 
                     <img src="https://motorolain.vtexassets.com/assets/vtex.file-manager-graphql/images/7d213632-b607-498c-8d7e-75d07327b353___363c993e847b1c7eb050da30dcddbb6c.jpg  " alt="Button Image 1">
@@ -486,25 +492,25 @@ footer {
           <center> <br> <h2 class="animated-element">Featured Products</h2> <br></center> 
             <div class="product-grid">
                 <div class="product-card">
-                 <a href="SmartPhones.html">   <img src="https://5.imimg.com/data5/SELLER/Default/2024/5/420464956/TG/PX/IW/222515528/apple-iphone-15-128-gb-pink-250x250.jpg" alt="Smartphones"></a>
+                 <a href="category/2">   <img src="https://5.imimg.com/data5/SELLER/Default/2024/5/420464956/TG/PX/IW/222515528/apple-iphone-15-128-gb-pink-250x250.jpg" alt="Smartphones"></a>
                     <p>Smartphones</p>
                 </div>
                 <div class="product-card">
-                 <a href="Laptops.html">   <img src="https://static-ecapac.acer.com/media/wysiwyg/Desktop-Banner_640x720_2_1.jpg" alt="Laptops"> </a>
+                 <a href="category/3">   <img src="https://static-ecapac.acer.com/media/wysiwyg/Desktop-Banner_640x720_2_1.jpg" alt="Laptops"> </a>
                     <p>Laptops</p>
                 </div>
                 <div class="product-card">
-                   <a href="TShirts.html"> <img src="https://5.imimg.com/data5/SELLER/Default/2023/10/354886967/TI/DF/AE/100983625/tshirt-maroon-png-500x500.png" alt="T-shirts"></a>
+                   <a href="category/4"> <img src="https://5.imimg.com/data5/SELLER/Default/2023/10/354886967/TI/DF/AE/100983625/tshirt-maroon-png-500x500.png" alt="T-shirts"></a>
                     <p>T-shirts</p>
                 </div>
                 
                 <div class="product-card">
-                   <a href="EarBuds.html"> <img src="https://static.wixstatic.com/media/8f92dc_7034699e0d1b4c8e847f50101611b90f~mv2.jpg/v1/fill/w_320,h_320,q_90/8f92dc_7034699e0d1b4c8e847f50101611b90f~mv2.jpg" alt="Buds"> </a>
+                   <a href="category/5"> <img src="https://static.wixstatic.com/media/8f92dc_7034699e0d1b4c8e847f50101611b90f~mv2.jpg/v1/fill/w_320,h_320,q_90/8f92dc_7034699e0d1b4c8e847f50101611b90f~mv2.jpg" alt="Buds"> </a>
                     <p>Ear Buds</p>
                 </div>
                 
                 <div class="product-card">
-                   <a href="Camera.html"> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb-whPXEqeo89Ogjs6UM35Q1mKsh1oUnntOQ&s" alt="Camera"> </a>
+                   <a href="category/2"> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb-whPXEqeo89Ogjs6UM35Q1mKsh1oUnntOQ&s" alt="Camera"> </a>
                     <p>Camera</p>
                 </div>
 
@@ -512,7 +518,7 @@ footer {
              
 
                 <div class="product-card">
-                   <a href="Toys.html"> <img src="https://www.cnet.com/a/img/resize/af7a1129318b00fa6386dc1731cd14b09dc21eb8/hub/2023/10/02/a2702f0c-5206-4306-8fd2-ee703fe93259/pyxel.jpg?auto=webp&fit=crop&height=1200&width=1200" alt="Toys"></a>
+                   <a href="category/7"> <img src="https://www.cnet.com/a/img/resize/af7a1129318b00fa6386dc1731cd14b09dc21eb8/hub/2023/10/02/a2702f0c-5206-4306-8fd2-ee703fe93259/pyxel.jpg?auto=webp&fit=crop&height=1200&width=1200" alt="Toys"></a>
                     <p>Toys</p>
                 </div>
                 
@@ -526,7 +532,7 @@ footer {
             <center>
             
                
-                <a href="Tv.html"  class="image-button">
+                <a href="category/1"  class="image-button">
                     <img src="https://motorolain.vtexassets.com/assets/vtex.file-manager-graphql/images/766a3297-c51a-4485-8f49-8a473cf4c7d6___a13a3612b4f84a13e7fa4e52c1d17230.jpg " alt="Button Image 2">
                 </a>
             </div>
@@ -589,6 +595,7 @@ footer {
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/b71be40703.js" crossorigin="anonymous"></script>
     <script>
 
 document.addEventListener('DOMContentLoaded', () => {

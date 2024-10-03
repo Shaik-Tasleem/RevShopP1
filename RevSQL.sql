@@ -23,24 +23,6 @@ CREATE TABLE SPRING_SESSION_ATTRIBUTES (
     CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_PRIMARY_ID) 
     REFERENCES SPRING_SESSION(PRIMARY_ID) ON DELETE CASCADE
 );
-create table Category(
-categoryId int not null primary key auto_increment,
-categoryName varchar(200) not null
-);
-select * from buyer;
-select * from SPRING_SESSION_ATTRIBUTES;
-insert into Category(categoryId,categoryName) values(1,'Tshirts');
-insert into Category(categoryId,categoryName) values(2,'Toys');
-insert into Category(categoryId,categoryName) values(3,'Shirts');
-insert into Category(categoryId,categoryName) values(4,'Toys');
-insert into Category(categoryId,categoryName) values(5,'WashingMachine');
-insert into Category(categoryId,categoryName) values(6,'Hoodies');
-insert into Category(categoryId,categoryName) values(7,'Printers');
-insert into Category(categoryId,categoryName) values(8,'Books');
-insert into Category(categoryId,categoryName) values(9,'VideosGames');
-insert into Category(categoryId,categoryName) values(10,'Furniture');
-insert into Category(categoryId,categoryName) values(11,'Laptops');
-insert into Category(categoryId,categoryName) values(12,'EarBuds');
 
-select * from buyer;
+select * from SPRING_SESSION_ATTRIBUTES
 
