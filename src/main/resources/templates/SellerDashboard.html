@@ -264,15 +264,15 @@ h1 {
 </head>
 <body>
     <header>
-        <div class="logo"><img src="@{/images/revshop-logo.jpg}"><span></span></div>
+        <div class="logo"><img th:src="@{/images/revshop-logo.jpg}"><span></span></div>
         
             <nav class="navbar">
                 <ul>
                     <li><a href="dashboard.html">Dashboard</a></li>
                     <li><a th:href="@{/ecom/manage}">Product Management</a></li>
                     <li><a href="orders.html">Orders</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                    <li><a href="logout.html">Logout</a></li>
+                    <li><a th:href="@{/ecom/seller/sellerprofile}">Profile</a></li>
+                    <li><a th:href="@{/ecom/Logout}">Logout</a></li>
                 </ul>
             </nav>
         </header>
@@ -306,6 +306,7 @@ h1 {
                     <a th:href="@{/products/add(categoryId=21)}"><img src="https://m.media-amazon.com/images/I/61zv6o60hvL._AC_SL1500_.jpg" alt="Mobile Accessories"></a>
                     <a th:href="@{/products/add(categoryId=22)}"><img src="https://m.media-amazon.com/images/I/51V2rBWZjiL._AC_SL1200_.jpg" alt="Musical Instruments"></a>
                     <a th:href="@{/products/add(categoryId=23)}"><img src="https://m.media-amazon.com/images/I/41WfGReNi9L.jpg" alt="Bikes"></a>
+                    <a th:href="@{/products/add(categoryId=24)}"><img src="https://m.media-amazon.com/images/I/41WfGReNi9L.jpg" alt="Spekers"></a>
                 </div>
             </div>            <button class="nav-btn right-btn" id="rightBtn">&#10095;</button>
         </div>

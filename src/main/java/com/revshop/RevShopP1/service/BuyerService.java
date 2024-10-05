@@ -54,4 +54,23 @@ public class BuyerService {
         buyer.setPassword(newPassword);
         buyerRepo.save(buyer);
     }
+	public Buyer getBuyerDetailsById(Long buyerId) {
+		return buyerRepo.findById(buyerId).get();
+	}
+	public void updateBuyerProfile(Buyer updatedBuyer) {
+        // Fetch the existing buyer record from the database
+        Buyer existingBuyer = buyerRepo.findById(updatedBuyer.getBuyerId()).orElse(null);
+        
+        if (existingBuyer != null) {
+            // Update the existing buyer's details with the new values
+            existingBuyer.setFirstName(updatedBuyer.getFirstName());
+            existingBuyer.setLastName(updatedBuyer.getLastName());
+            existingBuyer.setEmail(updatedBuyer.getEmail());
+            existingBuyer.setMobileNumber(updatedBuyer.getMobileNumber());
+            // Add more fields if needed
+
+            // Save the updated buyer back to the database
+            buyerRepo.save(existingBuyer);
+        }
+    }
 }

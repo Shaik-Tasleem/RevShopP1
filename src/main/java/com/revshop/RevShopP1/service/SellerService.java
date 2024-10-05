@@ -47,7 +47,24 @@ public class SellerService {
 
 		return null;
 	}
+	public void updateSellerPassword(String email, String newPassword) throws NoSuchAlgorithmException {
+	    // Find the seller by email
+	    Seller seller = sellerRepo.findByEmail(email);
+	    if (seller != null) {
+	        // Hash the new password before saving
+	        seller.setPassword(pwd_obj.hashPassword(newPassword));
+	        sellerRepo.save(seller);  // Save the updated seller to the database
+	    }
+	}
 
+	public Seller getSellerDetailsById(Long sellerId) {
+        return sellerRepo.findById(sellerId).orElse(null);
+    }
+
+    // Update seller profile information
+    public void updateSellerProfile(Seller seller) {
+        sellerRepo.save(seller);
+    }
 	public Seller getSellerDetailsByEmail(String email) {
 		return sellerRepo.findByEmail(email);
 	}
@@ -57,11 +74,7 @@ public class SellerService {
 		return sellerRepo.findByMobileNumber(mobileNumber);
 	}
 
-	public void updateSellerPassword(String em, String hashPassword) {
-		Seller seller=sellerRepo.findByEmail(em);
-		seller.setPassword(hashPassword);
-		sellerRepo.save(seller);
-	}
+	
 
 	public Seller findById(Long double1) {
 		// TODO Auto-generated method stub

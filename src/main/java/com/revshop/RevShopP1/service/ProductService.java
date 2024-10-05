@@ -68,4 +68,9 @@ public class ProductService {
             updatedProduct.getImage()
         );
     }
+
+	public Product findById(Long productId) {
+		// TODO Auto-generated method stub
+		return productRepository.findById(productId).get();
+	}
 }

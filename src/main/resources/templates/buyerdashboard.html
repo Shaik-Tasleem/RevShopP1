@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -387,7 +384,7 @@ footer {
 </head>
 <body>
     <header>
-        <div class="logo"><img src="http://127.0.0.1:5500/images/revshop-logo.png"><span></span></div>
+        <div class="logo"><img th:src="@{/images/revshop-logo.jpg}"><span></span></div>
       
         <form action="/search" method="post">
             <input type="text" name="keyword" placeholder="Search for products..." 
@@ -404,11 +401,11 @@ footer {
                     </span> profile
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="MyProfile.html">My Profile</a></li>
+                    <li><a th:href="@{/ecom/buyer/profile}">My Profile</a></li>
                     <li><a href="Order.html">Orders</a></li>
                     <li><a href="Wishlist.html">Wishlist</a></li>
                     
-                    <li><a href="#">Logout</a></li>
+                    <li><a th:href="@{/ecom/Logout}">Logout</a></li>
                 </ul>
             </div>
             <button class="cart-icon"><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg" alt="Cart"> <span>Cart</span></button>

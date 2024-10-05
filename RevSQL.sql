@@ -29,3 +29,5 @@ insert into category values(24,'Speakers');
 insert into category values(25,'Watches');
 insert into category values(26,'Shoes');
 select * from product;
+select * from cart;
+desc product;

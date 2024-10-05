@@ -10,7 +10,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
 
-    private int price;
+    private double price;
     private int quantity;
 
     @ManyToOne
@@ -32,12 +32,12 @@ public class Cart {
         this.cartId = cartId;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setPrice(double price2) {
+        this.price = price2;
     }
 
     public int getQuantity() {
