@@ -54,4 +54,9 @@ public class BuyerService {
         buyer.setPassword(newPassword);
         buyerRepo.save(buyer);
     }
+	public Buyer findBuyerDetailsById(Long buyerId) {
+		// TODO Auto-generated method stub
+		return buyerRepo.findById(buyerId).get();
+	}
+ 
 }

@@ -1,6 +1,8 @@
 package com.revshop.RevShopP1.controller;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,17 +11,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.revshop.RevShopP1.model.Buyer;
+import com.revshop.RevShopP1.model.*;
+import com.revshop.RevShopP1.model.Product;
 import com.revshop.RevShopP1.service.BuyerService;
+import com.revshop.RevShopP1.service.CartService;
 import com.revshop.RevShopP1.service.EmailService;
+import com.revshop.RevShopP1.service.ProductService;
+import com.revshop.RevShopP1.service.WishlistService;
 import com.revshop.RevShopP1.utils.PasswordUtils;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
@@ -27,6 +35,12 @@ import jakarta.servlet.http.HttpServletResponse;
 public class BuyerController {
     @Autowired
     private BuyerService buyerService;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private CartService cartService;
+    @Autowired
+    private WishlistService wishService;
     @Autowired
     private PasswordUtils pwd_obj;
 
@@ -99,7 +113,149 @@ public class BuyerController {
         }
     }
     @GetMapping("/buyerdashboard")
-    public String displayBuyerDashboard() {
-    	return "buyerdashboard";
+    public String displayBuyerDashboard(Model model, HttpServletRequest request) {
+        // Assuming you have a method to get the buyer's ID from the session
+        Long buyerId = (Long) request.getSession().getAttribute("buyerId");
+        model.addAttribute("buyerId", buyerId);
+        return "buyerdashboard";
+    }
+    @PostMapping("/toggle")
+	public ResponseEntity<Map<String, Object>> toggleCart(@RequestParam("productId") Long productId,
+			HttpServletRequest request) {
+		// Retrieve buyer ID from cookies
+		Map<String, Object> response = new HashMap<>();
+		Long buyerId = getBuyerIdFromCookies(request); // This should fetch the buyer ID from cookies or session
+
+		if (buyerId != null) {
+			Product product = productService.getProductById(productId);
+			Buyer buyer = buyerService.findBuyerDetailsById(buyerId);
+			if (product != null) {
+				boolean isProductInCart = cartService.existsByBuyerAndProduct_ProductId(buyer, productId);
+
+				if (isProductInCart) {
+					cartService.removeProductFromCart(buyerId, product);
+					response.put("message", "Product removed from cart.");
+				} else {
+					cartService.addProductToCart(buyerId, product);
+					response.put("message", "Product added to cart.");
+				}
+
+				response.put("success", true);
+			} else {
+				response.put("success", false);
+				response.put("errorMessage", "Product not found.");
+			}
+		} else {
+			response.put("success", false);
+			response.put("errorMessage", "Please log in to manage your cart.");
+		}
+
+		return ResponseEntity.ok(response); // Return the JSON response
+	}
+
+	@PostMapping("/wishlist/toggle")
+	public ResponseEntity<Map<String, Object>> toggleWish(@RequestParam("productId") Long productId,
+			HttpServletRequest request) {
+		// Retrieve buyer ID from cookies
+		Map<String, Object> response = new HashMap<>();
+		Long buyerId = getBuyerIdFromCookies(request); // This should fetch the buyer ID from cookies or session
+		if (buyerId != null) {
+			Product product = productService.getProductById(productId);
+			Buyer buyer = buyerService.findBuyerDetailsById(buyerId);
+			if (product != null) {
+				boolean isProductInWish = wishService.existsByBuyerAndProduct_ProductId(buyer, productId);
+				if (isProductInWish) {
+					System.out.println("Hi1");
+					wishService.removeProductFromWishlist(buyerId, product);
+					response.put("message", "Product removed from Wish.");
+				} else {
+					System.out.println("Hi1");
+					wishService.addProductToWish(buyerId, product);
+					response.put("message", "Product added to Wish.");
+				}
+				response.put("success", true);
+			} else {
+				response.put("success", false);
+				response.put("errorMessage", "Product not found.");
+			}
+
+		} else {
+			response.put("success", false);
+			response.put("errorMessage", "Please log in to manage your cart.");
+		}
+
+		return ResponseEntity.ok(response);
+
+	}
+
+	@GetMapping("/wishlist/view")
+
+	// Create a new Wishlist entry
+	public String viewWishlist(Model model, HttpServletRequest request) {
+		Long buyerId = getBuyerIdFromCookies(request);
+		Buyer buyer = buyerService.findBuyerDetailsById(buyerId);
+		if (buyerId != null) {
+			List<Wishlist> wishlistItems = wishService.findAllByBuyer(buyer);
+			List<Product> productInWish = new ArrayList<>();
+			for (Wishlist i : wishlistItems) {
+				productInWish.add(i.getProduct());
+				// System.out.println();
+			}
+			model.addAttribute("wishlistItems", productInWish);
+		}
+
+		return "wishlist-view"; // Render the wishlist Thymeleaf view
+	}
+
+	private Long getBuyerIdFromCookies(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if ("buyerId".equals(cookie.getName())) {
+					return Long.parseLong(cookie.getValue());
+				}
+			}
+		}
+		return null;
+	}
+
+	@GetMapping("/cart/view")
+	public String cartView(Model model, HttpServletRequest request) {
+		Long buyerId = getBuyerIdFromCookies(request);
+		Buyer buyer = buyerService.findBuyerDetailsById(buyerId);
+		if (buyerId != null) {
+			List<Cart> cartItems=cartService.findAllByBuyer(buyer);
+			List<Product> productInCart = new ArrayList<>();
+			for(Cart i:cartItems) {
+				productInCart.add(i.getProduct());
+			}
+			model.addAttribute("cartItems", productInCart);
+		}
+		return "cart-view";
+	}
+	@PostMapping("/cart/remove/{productId}")
+    public String removeFromCart(@PathVariable Long productId, HttpServletRequest request) {
+        Long buyerId = null;
+        Product product = productService.getProductById(productId);
+        // Retrieve buyer ID from cookies
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("buyerId")) {
+                    buyerId = Long.parseLong(cookie.getValue());
+                    break;
+                }
+            }
+        }
+        
+        if (buyerId != null) {
+            // Call service to remove the product from wishlist
+        	System.out.println(buyerId);
+        	System.out.println(productId);
+        	cartService.removeProductFromCart(buyerId, product);
+        }
+
+        // Redirect back to wishlist view
+        return "redirect:/ecom/cart/view";
     }
 }

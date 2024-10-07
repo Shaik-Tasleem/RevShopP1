@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.revshop.RevShopP1.model.Category;
 import com.revshop.RevShopP1.model.Product;
 import com.revshop.RevShopP1.model.Seller;
+import com.revshop.RevShopP1.model.Wishlist;
 import com.revshop.RevShopP1.service.CategoryService;
 import com.revshop.RevShopP1.service.ProductService;
 import com.revshop.RevShopP1.service.SellerService;
+import com.revshop.RevShopP1.service.WishlistService;
 
 import jakarta.servlet.http.*;
 
@@ -32,6 +34,8 @@ public class ProductController {
     private CategoryService categoryService;
     @Autowired
     private SellerService sellerService;
+    @Autowired
+    private WishlistService wishlistService;
     // Home or dashboard
     @GetMapping("/dashboard") // Change this if needed
     public String fromdashboard() {
@@ -52,6 +56,15 @@ public class ProductController {
         model.addAttribute("availableProducts", availableProducts);
         return "products"; // Return the name of the detail view
     }
+    @GetMapping("/logout/{id}")
+    public String showlogoutProduct(@PathVariable Long id, Model model) {
+        Product product = productService.getProductById(id);
+        model.addAttribute("product", product);
+        
+        List<Product> availableProducts = productService.getAllProducts();
+        model.addAttribute("availableProducts", availableProducts);
+        return "logoutproducts"; // Return the name of the detail view
+    }
     
     // Displaying the products as per category id from buyer dashboard
     @GetMapping("/category/{categoryId}")
@@ -60,6 +73,7 @@ public class ProductController {
         model.addAttribute("products", products);
         return "BuyerdashboardExtend";  // HTML page to display the products
     }
+  
 
     // Seller check
     @GetMapping("/dashboard/seller") // Optional: Change as necessary
@@ -109,4 +123,28 @@ public class ProductController {
         // Redirect back to the dashboard after saving
         return "SellerDashboard";
     }
+    @GetMapping("/wishlist") // Optional: Change as necessary
+    public String viewWishlist(Model model, HttpServletRequest request) {
+        // Retrieve buyer ID from the cookie
+        Long buyerId = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("buyerId")) {
+                    buyerId = Long.parseLong(cookie.getValue());
+                    break;
+                }
+            }
+        }
+
+        if (buyerId != null) {
+            // Fetch the buyer's wishlist items
+            List<Wishlist> wishlistItems = wishlistService.getWishlistByBuyer(buyerId); // Assuming you have this method
+            model.addAttribute("wishlist", wishlistItems);
+        }
+
+        return "wishlist"; // Return the wishlist HTML page
+    }
+
+    
 }

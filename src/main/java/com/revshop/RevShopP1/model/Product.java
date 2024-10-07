@@ -26,7 +26,42 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Payments> payments = new ArrayList<>();
 
-    private String productName;
+    @OneToMany(mappedBy="product",cascade = CascadeType.ALL)
+    private List<Wishlist> wishlist=new ArrayList<>();
+    
+//    @OneToMany(mappedBy="product",cascade = CascadeType.ALL)
+//    private List<Wishlist> cart=new ArrayList<>();
+//    
+    public List<Payments> getPayments() {
+		return payments;
+	}
+    
+    
+    @OneToMany(mappedBy="product",cascade = CascadeType.ALL)
+    private List<Wishlist> review=new ArrayList<>();
+    
+
+//	public List<Wishlist> getReview() {
+//		return review;
+//	}
+
+//	public void setReview(List<Wishlist> review) {
+//		this.review = review;
+//	}
+
+	public void setPayments(List<Payments> payments) {
+		this.payments = payments;
+	}
+
+	public List<Wishlist> getWishlist() {
+		return wishlist;
+	}
+
+	public void setWishlist(List<Wishlist> wishlist) {
+		this.wishlist = wishlist;
+	}
+
+	private String productName;
     private String productDescription;
     private double price;
     private double discountPrice;

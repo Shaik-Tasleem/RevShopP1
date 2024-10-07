@@ -1,16 +1,22 @@
 package com.revshop.RevShopP1.model;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
+
 @Table(name = "wishlist")
+
 public class Wishlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wishId;
-
-    private Long productId;
+    
+    @ManyToOne
+    @JoinColumn(name="productId",nullable=false)
+    public Product product;
     private int quantity;
 
     @ManyToOne
@@ -29,16 +35,16 @@ public class Wishlist {
     public void setWishId(Long wishId) {
         this.wishId = wishId;
     }
+    
+	public Product getProduct() {
+		return product;
+	}
 
-    public Long getProductId() {
-        return productId;
-    }
+	public void setProduct(Product product) {
+		this.product = product;
+	}
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public int getQuantity() {
+	public int getQuantity() {
         return quantity;
     }
 

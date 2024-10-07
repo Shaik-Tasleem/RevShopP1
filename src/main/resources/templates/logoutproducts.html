@@ -292,35 +292,40 @@ nav ul li {
 <body>
 
   <header>
-        <div class="logo"><img src="http://127.0.0.1:5500/images/revshop-logo.png"><span></span></div>
-      
-         <form action="/search" method="post">
-            <input type="text" name="keyword" placeholder="Search for products..." 
-                   th:value="${keyword}" /><span></span>
-            
-            <button type="submit" class="btn btn-light"> <i class="fa-solid fa-magnifying-glass"></i></button>
-            </form> </div>
-       
-        <div class="account-cart">
-            <div class="dropdown">
-                <button class="account-icon">
-                    <span>
-                        <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/profile-52e0dc.svg" alt="profile">
-                    </span> profile
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="MyProfile.html">My Profile</a></li>
-                    <li><a href="Order.html">Orders</a></li>
-                    <li><a href="Wishlist.html">Wishlist</a></li>
-                    
-                    <li><a href="#">Logout</a></li>
-                </ul>
-            </div>
-            <button class="cart-icon"><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg" alt="Cart"> <span>Cart</span></button>
-            <button class="account-icon"><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/Store-9eeae2.svg" alt="Become a Seller"> <span>Become a Seller</span></button>
-            <button class="account-icon"><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/helpcenter-7d90c0.svg" > </button>
-        </div>
-    </header>
+		<div class="logo">
+			<img th:src="@{/images/revshop-logo.jpg}"><span></span>
+		</div>
+		<div>
+			<form action="/logout/search" method="post">
+				<input type="text" name="keyword"
+					placeholder="Search for products..." th:value="${keyword}" /><span></span>
+				<button type="submit">
+					Search<span></span>
+				</button>
+			</form>
+			<span></span>
+		</div>
+		<div class="account-cart">
+			<a th:href="@{/ecom/LoginPage}">
+			<button class="account-icon">
+				<span><img
+					src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/profile-52e0dc.svg"
+					alt="Login"></span> Login
+			</button>
+			</a>
+			 <a th:href="@{/ecom/emptyCart}">
+        <button class="cart-icon">
+            <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg"
+                alt="Cart"> <span> Cart</span>
+        </button>
+    	</a>
+			<button class="account-icon">
+				<img
+					src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/Store-9eeae2.svg"
+					alt=" Become a Seller"> <span> Seller</span>
+			</button>
+		</div>
+	</header>
     <br>
     <br>
     <br>
@@ -342,8 +347,9 @@ nav ul li {
                          th:class="${product.quantity > 0} ? 'available' : 'out-of-stock'"
                          th:text="${product.quantity > 0 ? 'Available' : 'Out of Stock'}"></div>
                     <div class="mt-4">
-                        <a href="#" class="btn btn-primary"><img alt="" src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg"></a>
-                        <a href="#" class="btn btn-secondary"><img alt="" src="https://assets.ajio.com/static/img/pdp-wishlist-icon-desktop.svg"></a>
+                    
+                        <a  th:href="@{/ecom/LoginPage}" class="btn btn-primary"><img alt="" src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg"></a>
+                        <a  th:href="@{/ecom/LoginPage}" class="btn btn-secondary"><img alt="" src="https://assets.ajio.com/static/img/pdp-wishlist-icon-desktop.svg"></a>
                         <br>
                         <div class="reviews">
 						<div class="review">
@@ -356,8 +362,8 @@ nav ul li {
 								<strong>Reviewer 2:</strong> Excellent quality!
 							</p>
 						</div>
-						<button class="btn btn-primary see-all-reviews">See All
-							Reviews</button>
+						<a th:href="@{/ecom/LoginPage}" class="btn btn-primary see-all-reviews">See All
+							Reviews</a>
 					</div>
                     </div>
                 </div>
@@ -371,14 +377,15 @@ nav ul li {
             <div class="col-md-3" th:each="availableProduct : ${availableProducts}">
             
                 <div class="product-card">
-                <a a  th:href="@{/products/{id}(id=${availableProduct.productId})}" >
+                <a a  th:href="@{/logout/products/{id}(id=${availableProduct.productId})}" >
                     <img th:src="${availableProduct.image}"   alt="Available Product Image" />
                     <h3 th:text="${availableProduct.productName}"></h3>
                     </a>
                     <!-- <a th:href="@{/products/product/{id}(id=${availableProduct.id})}" class="btn btn-primary">View</a> -->
-                    <span><a href="" class="btn btn-primary"><img alt="" src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg"></a>  
+                    <span><a href="ecom/Login" class="btn btn-primary"><img alt="" src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg"></a>  
                     <a href="#" class="btn btn-secondary"><img alt="" src="https://assets.ajio.com/static/img/pdp-wishlist-icon-desktop.svg"></a> </span> 
-                </div>
+                </div> 
+                     
             </div>
         </div>
     </div>
@@ -422,259 +429,3 @@ nav ul li {
         <script src="https://kit.fontawesome.com/b71be40703.js" crossorigin="anonymous"></script>
 </body>
 </html>
-
-
-
-<!-- 
-//with review 
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${product.productName} + ' - Product Detail'"></title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> Font Awesome for Stars
-    <style>
-        body {
-            background-color: #eef2f3;
-            transition: background-color 0.5s ease;
-        }
-        
-        header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            background:rgb(238, 238, 213);
-            padding: 10px 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        .logo img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 5px;
-            margin-left: 30px;
-        }
-
-        input[type="text"] {
-            border: 2px solid #ddd;
-            border-radius: 50px;
-            padding: 10px 20px;
-            font-size: 16px;
-            outline: none;
-            width: 680px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        input[type="text"]::placeholder {
-            color: #aaa;
-        }
-
-        .account-icon, .cart-icon {
-            background: #fbfbfb;
-            color: #000000;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-        }
-
-        .account-icon:hover, .cart-icon:hover {
-            background: #865f1896;
-        }
-
-        .product-container {
-            margin: 30px auto;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .product-container:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .product-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            animation: fadeIn 1s ease-in-out;
-            transition: transform 0.5s ease;
-        }
-
-        .product-image:hover {
-            transform: rotate(4.5deg);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .availability {
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-top: 10px;
-        }
-
-        .available {
-            color: #28a745;
-        }
-
-        .out-of-stock {
-            color: #dc3545;
-        }
-
-        .reviews-section {
-            margin-top: 30px;
-        }
-
-        .review-card {
-            margin-top: 20px;
-        }
-
-        .stars {
-            color: #ffc107;
-        }
-
-        footer {
-            background-color: #1a1a1a;
-            color: #fff;
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-        }
-
-        .footer-section {
-            width: 30%;
-        }
-
-        .footer-social img {
-            width: 24px;
-            height: 24px;
-            filter: invert(1);
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="logo"><img src="http://127.0.0.1:5500/images/revshop-logo.png"><span></span></div>
-        <form action="/search" method="post">
-            <input type="text" name="keyword" placeholder="Search for products..." th:value="${keyword}" />
-            <button type="submit" class="btn btn-light"><i class="fa-solid fa-magnifying-glass"></i></button>
-        </form>
-        <div class="account-cart">
-            <div class="dropdown">
-                <button class="account-icon"><span><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/profile-52e0dc.svg" alt="profile"></span> Profile</button>
-                <ul class="dropdown-menu">
-                    <li><a href="MyProfile.html">My Profile</a></li>
-                    <li><a href="Order.html">Orders</a></li>
-                    <li><a href="Wishlist.html">Wishlist</a></li>
-                    <li><a href="#">Logout</a></li>
-                </ul>
-            </div>
-            <button class="cart-icon"><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg" alt="Cart"> <span>Cart</span></button>
-        </div>
-    </header>
-
-    <main class="container mt-5">
-        <div class="product-container">
-            <div class="row">
-                <div class="col-md-6">
-                    <img class="product-image" th:src="${product.image}" alt="Product Image" />
-                </div>
-                <div class="col-md-6">
-                    <h1 th:text="${product.productName}"></h1>
-                    <p th:text="${product.productDescription}"></p>
-                    <p th:text="'Price: $' + ${product.price}"></p>
-
-                    <div class="availability" th:class="${product.quantity > 0} ? 'available' : 'out-of-stock'"
-                         th:text="${product.quantity > 0 ? 'Available' : 'Out of Stock'}"></div>
-                </div>
-            </div>
-
-            Review Form
-            <div class="reviews-section">
-                <h3>Leave a Review</h3>
-                <form th:action="@{/products/{id}/review(id=${product.productId})}" method="post">
-                    <div class="form-group">
-                        <label for="review">Your Review</label>
-                        <textarea class="form-control" id="review" name="review" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="rating">Rating</label>
-                        <select class="form-control" id="rating" name="rating" required>
-                            <option value="5">★★★★★ (5)</option>
-                            <option value="4">★★★★☆ (4)</option>
-                            <option value="3">★★★☆☆ (3)</option>
-                            <option value="2">★★☆☆☆ (2)</option>
-                            <option value="1">★☆☆☆☆ (1)</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
-                </form>
-
-                Display Reviews
-                <h3 class="mt-5">Customer Reviews</h3>
-                <div th:each="review : ${product.reviews}">
-                    <div class="review-card card">
-                        <div class="card-body">
-                            <p><strong th:text="${review.buyerName}">Buyer Name</strong></p>
-                            <p th:text="${review.comment}">Review Comment</p>
-                            <div class="stars">
-                                <i class="fa fa-star" th:if="${review.rating >= 1}"></i>
-                                <i class="fa fa-star" th:if="${review.rating >= 2}"></i>
-                                <i class="fa fa-star" th:if="${review.rating >= 3}"></i>
-                                <i class="fa fa-star" th:if="${review.rating >= 4}"></i>
-                                <i class="fa fa-star" th:if="${review.rating >= 5}"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                Overall Rating
-                <div class="mt-5">
-                    <h4>Overall Rating: <span th:text="${product.averageRating}"></span> ★</h4>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer>
-        <div class="footer-section">
-            <h3>Contact Us:</h3>
-            <address>
-                Revature <br> Workafella, 12th floor <br> Tech Park Area, <br> Chennai, <br> TN, India<br>
-            </address>
-        </div>
-        <div class="footer-section">
-            <p>Email: <a href="mailto:info@yourcompany.com">info@yourcompany.com</a></p>
-            <p>Phone: <a href="tel:+1234567890">+91912345678</a></p>
-            <p>© 2024 All rights are reserved, RevShop.</p>
-        </div>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
-
---> -->

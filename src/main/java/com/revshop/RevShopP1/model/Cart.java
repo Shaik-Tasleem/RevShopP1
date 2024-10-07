@@ -21,7 +21,9 @@ public class Cart {
     @JoinColumn(name = "sellerId", nullable = false)
     private Seller seller;
 
-    private Long productId;
+    @ManyToOne
+    @JoinColumn(name="productId",nullable=false)
+    public Product product;
 
     // Getters and Setters
     public Long getCartId() {
@@ -44,7 +46,15 @@ public class Cart {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
@@ -64,11 +74,5 @@ public class Cart {
         this.seller = seller;
     }
 
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
+ 
 }

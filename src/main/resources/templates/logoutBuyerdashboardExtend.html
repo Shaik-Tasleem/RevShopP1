@@ -425,36 +425,41 @@ button:hover {
     </style>
 </head>
 <body>
- <header>
-        <div class="logo"><img th:src="@{/images/revshop-logo.jpg}"><span></span></div>
-      
-        <form action="/search" method="post">
-            <input type="text" name="keyword" placeholder="Search for products..." 
-                   th:value="${keyword}" /><span></span>
-            
-            <button type="submit" class="btn btn-light"> <i class="fa-solid fa-magnifying-glass"></i></button>
-            </form> </div>
-       
-        <div class="account-cart">
-            <div class="dropdown">
-                <button class="account-icon">
-                    <span>
-                        <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/profile-52e0dc.svg" alt="profile">
-                    </span> profile
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="MyProfile.html">My Profile</a></li>
-                    <li><a href="Order.html">Orders</a></li>
-                    <li><a href="Wishlist.html">Wishlist</a></li>
-                    
-                    <li><a href="#">Logout</a></li>
-                </ul>
-            </div>
-            <button class="cart-icon"><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg" alt="Cart"> <span>Cart</span></button>
-            <button class="account-icon"><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/Store-9eeae2.svg" alt="Become a Seller"> <span>Become a Seller</span></button>
-            <button class="account-icon"><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/helpcenter-7d90c0.svg" > </button>
-        </div>
-    </header>  
+     <header>
+		<div class="logo">
+			<img th:src="@{/images/revshop-logo.jpg}"><span></span>
+		</div>
+		<div>
+			<form action="/logout/search" method="post">
+				<input type="text" name="keyword"
+					placeholder="Search for products..." th:value="${keyword}" /><span></span>
+				<button type="submit">
+					Search<span></span>
+				</button>
+			</form>
+			<span></span>
+		</div>
+		<div class="account-cart">
+			<a th:href="@{/ecom/LoginPage}">
+			<button class="account-icon">
+				<span><img
+					src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/profile-52e0dc.svg"
+					alt="Login"></span> Login
+			</button>
+			</a>
+			 <a th:href="@{/ecom/emptyCart}">
+        <button class="cart-icon">
+            <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg"
+                alt="Cart"> <span> Cart</span>
+        </button>
+    	</a>
+			<button class="account-icon">
+				<img
+					src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/Store-9eeae2.svg"
+					alt=" Become a Seller"> <span> Seller</span>
+			</button>
+		</div>
+	</header>
 
   <main>
     <div class="container mt-5">
@@ -463,7 +468,7 @@ button:hover {
             <div th:each="product : ${products}" class="col-md-4">
                 <div class="card mb-4" th:id="'product-' + ${product.productId}">
                     <!-- Wrap the image in an anchor tag -->
-                    <a th:href="@{/products/{id}(id=${product.productId})}">
+                    <a th:href="@{/products/logout/{id}(id=${product.productId})}">
                         <img th:src="@{${product.image}}" class="card-img-top" alt="Product Image">
                     </a>
                     <div class="card-body">
@@ -471,18 +476,17 @@ button:hover {
                         <p class="card-text" th:text="${product.productDescription}">Product Description</p>
                         <p class="card-text"><strong th:text="'Price: $' + ${product.price}">Price: $XX.XX</strong></p>
                         <!-- Add to Cart Button -->
-                     <form th:action="@{/ecom/cart/add/{productId}(productId=${product.productId})}" method="post">
+                        
+                     <form th:action="@{/ecom/LoginPage}" method="get">
     <button type="submit" class="btn btn-warning">Add to Cart</button>
 </form>
-<br>
 
 						
-						<form th:action="@{/ecom/wishlist/add/{productId}(productId=${product.productId})}" method="post">
+						<form th:action="@{/ecom/LoginPage}" method="get">
     
-   <button type="submit" class="btn btn-primary wishlist-btn" 
-            th:data-product-id="${product.productId}">Add to Wishlist</button>
+    <button type="submit" class="btn btn-primary">Add to Wishlist</button>
 </form>
-                      
+                        <span class="favorite-icon" onclick="toggleFavorite(this)" style="cursor: pointer;">&#10084;</span>
                     </div>
                 </div>
             </div>
@@ -546,35 +550,7 @@ button:hover {
             });
         });
     });
-	//////
-	 document.querySelectorAll('.wishlist-form').forEach(form => {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission
 
-            const productId = this.querySelector('.wishlist-btn').getAttribute('data-product-id');
-
-            // Perform an AJAX POST request to add the product to the wishlist
-            fetch(`/ecom/wishlist/add/${productId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    // If the product was successfully added to the wishlist, disable the button
-                    const wishlistButton = this.querySelector('.wishlist-btn');
-                    wishlistButton.disabled = true;
-                    wishlistButton.textContent = 'Added to Wishlist';
-                } else {
-                    alert('Failed to add product to wishlist.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -582,4 +558,3 @@ button:hover {
 <script src="https://kit.fontawesome.com/b71be40703.js" crossorigin="anonymous"></script>
 </body>
 </html>
-
