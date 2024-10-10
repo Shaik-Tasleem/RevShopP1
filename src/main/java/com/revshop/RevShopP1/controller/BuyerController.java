@@ -22,6 +22,7 @@ import com.revshop.RevShopP1.model.Product;
 import com.revshop.RevShopP1.service.BuyerService;
 import com.revshop.RevShopP1.service.CartService;
 import com.revshop.RevShopP1.service.EmailService;
+import com.revshop.RevShopP1.service.OrderService;
 import com.revshop.RevShopP1.service.ProductService;
 import com.revshop.RevShopP1.service.WishlistService;
 import com.revshop.RevShopP1.utils.PasswordUtils;
@@ -43,6 +44,8 @@ public class BuyerController {
     private WishlistService wishService;
     @Autowired
     private PasswordUtils pwd_obj;
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/buyerRegistration")
     public String registrationForm(Model model) {
@@ -258,4 +261,57 @@ public class BuyerController {
         // Redirect back to wishlist view
         return "redirect:/ecom/cart/view";
     }
+	
+	@PostMapping("/cart/buyNow")
+	public String checkout(Model model, HttpServletRequest request) {
+	    Long buyerId = getBuyerIdFromCookies(request);
+	    Buyer buyer = buyerService.findBuyerDetailsById(buyerId);
+	    
+	    if (buyer != null) {
+	        List<Cart> cartItems = cartService.findAllByBuyer(buyer);
+	        double totalPrice = cartItems.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum();
+	        
+	        model.addAttribute("cartItems", cartItems);
+	        model.addAttribute("totalPrice", totalPrice);
+	        model.addAttribute("buyer", buyer); // Display buyer's shipping info
+	    }
+	    
+	    return "checkout"; // Render checkout view
+	}
+	@PostMapping("/checkout/confirm")
+	public String confirmCheckout(HttpServletRequest request, Model model) {
+	    Long buyerId = getBuyerIdFromCookies(request);
+	    Buyer buyer = buyerService.findBuyerDetailsById(buyerId);
+
+	    if (buyer != null) {
+	        List<Cart> cartItems = cartService.findAllByBuyer(buyer);
+	        double totalPrice = cartItems.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum();
+	        
+	        // Save order for each cart item
+	        for (Cart cartItem : cartItems) {
+	            Orders order = new Orders();
+	            order.setBuyer(buyer);
+	            order.setProduct(cartItem.getProduct());
+	            order.setSeller(cartItem.getSeller()); // Store seller information
+	            order.setQuantity(cartItem.getQuantity());
+	            order.setShippingAddress(buyer.getStreet()+buyer.getCity()+buyer.getState()+buyer.getCountry());
+	            order.setTotalPrice(cartItem.getProduct().getPrice() * cartItem.getQuantity());
+	            order.setStatus("Processing"); // Initial status of the order
+	            orderService.saveOrder(order);
+	        }
+	        
+	        // Optionally clear the cart after order is placed
+	        cartService.clearCartForBuyer(buyer);
+	        
+
+	        
+	        model.addAttribute("orderSummary", cartItems);
+	        model.addAttribute("totalPrice", totalPrice);
+	        model.addAttribute("buyer", buyer);
+	    }
+	    
+	    return "order-confirmation"; // Return order confirmation page
+	}
+
+
 }

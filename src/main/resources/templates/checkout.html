@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Checkout</title>
+</head>
+<body>
+
+<h2>Checkout</h2>
+<form th:action="@{/ecom/checkout/confirm}" method="post">
+    <h3>Cart Summary</h3>
+    <ul>
+        <li th:each="item : ${cartItems}">
+            <span th:text="${item.product.productName}"></span> -
+            <span th:text="${item.quantity}"></span> x 
+            <span th:text="${item.product.price}"></span>
+            <p>Sold by: <span th:text="${item.seller.bussinessName}"></span></p> <!-- Seller information -->
+        </li>
+    </ul>
+    <p>Total Price: <span th:text="${totalPrice}"></span></p>
+
+    <h3>Shipping Information</h3>
+    <p th:text="${buyer.street} + ', ' + ${buyer.city} + ', ' + ${buyer.state} + ', ' + ${buyer.postalCode}"></p>
+
+    <h3>Payment Method</h3>
+    <select name="paymentMethod">
+        <option value="COD">Cash on Delivery</option>
+        <option value="UPI">UPI</option>
+        <option value="Card">Debit/Credit Card</option>
+    </select>
+
+    <button type="submit">Confirm Order</button>
+</form>
+
+</body>
+</html>

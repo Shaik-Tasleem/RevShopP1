@@ -25,6 +25,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 	void deleteByBuyerAndProduct_ProductId(Buyer buyer, Long productId);
 
 	List<Cart> findAllByBuyer(Buyer buyer);
+	
 
     
 //    
