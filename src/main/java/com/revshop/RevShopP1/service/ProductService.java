@@ -1,6 +1,7 @@
 package com.revshop.RevShopP1.service;
 
 import com.revshop.RevShopP1.model.Product;
+import com.revshop.RevShopP1.model.Seller;
 import com.revshop.RevShopP1.repository.ProductRepository;
 
 import jakarta.transaction.Transactional;

@@ -10,15 +10,18 @@ public class Wishlist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wishId;
 
-    private Long productId;
+    @ManyToOne
+    @JoinColumn(name = "productId", nullable = false) // Ensure Product entity has productId as PK
+    private Product product;
+
     private int quantity;
 
     @ManyToOne
-    @JoinColumn(name = "buyerId", nullable = false)
+    @JoinColumn(name = "buyerId", nullable = false) // Ensure Buyer entity has buyerId as PK
     private Buyer buyer;
 
     @ManyToOne
-    @JoinColumn(name = "sellerId", nullable = false)
+    @JoinColumn(name = "sellerId", nullable = false) // Ensure Seller entity has sellerId as PK
     private Seller seller;
 
     // Getters and Setters
@@ -30,12 +33,12 @@ public class Wishlist {
         this.wishId = wishId;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getQuantity() {

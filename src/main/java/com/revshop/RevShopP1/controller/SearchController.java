@@ -1,6 +1,7 @@
 package com.revshop.RevShopP1.controller;
 
-import java.util.List;
+import java.net.http.HttpRequest;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,8 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.revshop.RevShopP1.model.Product;
-import com.revshop.RevShopP1.service.ProductService;
+import com.revshop.RevShopP1.model.*;
+import com.revshop.RevShopP1.service.*;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class SearchController {
@@ -18,6 +22,14 @@ public class SearchController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private CartService cartService;
+    
+    @Autowired
+    private WishlistService wishlistService;
+    
+    @Autowired
+    private BuyerService buyerService;
     // Search from welcome page using GET
     @GetMapping("/products/search") // Updated mapping
     public String showWelcomePage(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
@@ -44,7 +56,6 @@ public class SearchController {
     @GetMapping("/searchproducts")
     public String showDemoPage(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
         List<Product> products;
-
         if (keyword == null || keyword.isEmpty()) {
             // No keyword provided, show all products
             products = productService.getAllProducts();
@@ -56,7 +67,6 @@ public class SearchController {
                 products = productService.getAllProducts();
             }
         }
-
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword); // Retain the search keyword
         return "BuyerdashboardExtend"; // Stay on the demo page
@@ -64,9 +74,9 @@ public class SearchController {
 
     // Post mapping for search on any page
     @PostMapping("/search")
-    public String searchProducts(@RequestParam("keyword") String keyword, Model model) {
+    public String searchProducts(@RequestParam("keyword") String keyword, Model model,HttpServletRequest request) {
         List<Product> products;
-
+        Long buyerId = getBuyerIdFromCookies(request);
         if (keyword == null || keyword.isEmpty()) {
             // No keyword provided, show all products
             products = productService.getAllProducts();
@@ -78,11 +88,41 @@ public class SearchController {
                 products = productService.getAllProducts();
             }
         }
-
+        Buyer buyer=buyerService.getBuyerDetailsById(buyerId);
+        List<Long> cartProductIds = new ArrayList<>();
+        if (buyerId != null) {
+        	for(Product i:products) {
+        		if(cartService.existsByBuyerAndProduct_ProductId(buyer, i.getProductId())) {
+        			cartProductIds.add(i.getProductId());
+        		}
+        	}
+        }
+        List<Long> wishllistProductIds=new ArrayList<>();
+        if(buyerId!=null) {
+        	for(Product i:products) {
+        		if(wishlistService.existsByBuyerAndProduct_ProductId(buyer, i.getProductId())) {
+        			wishllistProductIds.add(i.getProductId());
+        		}
+        	}
+        }
         model.addAttribute("products", products);
+        
         model.addAttribute("keyword", keyword); // Retain the search keyword
-
+        
+        model.addAttribute("cartItems", cartProductIds != null && !cartProductIds.isEmpty() ? cartProductIds : new ArrayList<>());
+        model.addAttribute("wishlistItems", wishllistProductIds!=null && !wishllistProductIds.isEmpty() ? wishllistProductIds:new ArrayList<>());
         // You can decide where to redirect based on which page the search is performed on
         return "BuyerdashboardExtend"; // Render the results on a common search results page
     }
+    private Long getBuyerIdFromCookies(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if ("buyerId".equals(cookie.getName())) {
+					return Long.parseLong(cookie.getValue());
+				}
+			}
+		}
+		return null;
+	}
 }

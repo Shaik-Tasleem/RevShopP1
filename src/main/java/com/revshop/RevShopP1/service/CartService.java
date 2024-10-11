@@ -1,13 +1,13 @@
 package com.revshop.RevShopP1.service;
 
-import com.revshop.RevShopP1.model.Buyer;
-import com.revshop.RevShopP1.model.Cart;
-import com.revshop.RevShopP1.model.Seller;
-import com.revshop.RevShopP1.repository.CartRepository;
+import com.revshop.RevShopP1.model.*;
+import com.revshop.RevShopP1.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -15,30 +15,50 @@ public class CartService {
     @Autowired
     private CartRepository cartRepository;
 
-    public boolean isProductInCart(Buyer buyer, Long productId) {
-        // Check if the product is already in the cart for this buyer
-        return cartRepository.existsByBuyerAndProductId(buyer, productId);
+    @Autowired
+    private BuyerRepository buyerRepository;
+    @Transactional
+    // Add product to cart
+    public void addProductToCart(Long buyerId, Product product) {
+        Buyer buyer = buyerRepository.findById(buyerId)
+                .orElseThrow(() -> new RuntimeException("Buyer not found"));
+
+        Optional<Cart> existingCart = cartRepository.findAllByBuyer(buyer)
+            .stream()
+            .filter(cart -> cart.getProduct().equals(product))
+            .findFirst();
+
+        if (existingCart.isPresent()) {
+            // If the product is already in the cart, update the quantity
+            Cart cart = existingCart.get();
+            cart.setQuantity(cart.getQuantity() + 1);  // Increase quantity
+            cartRepository.save(cart);
+        } else {
+            // Add new cart entry if the product is not in the cart
+            Cart cart = new Cart();
+            cart.setSeller(product.getSeller());
+            cart.setBuyer(buyer);
+            cart.setProduct(product);
+            cart.setQuantity(1);  // Assuming starting quantity is 1
+            cart.setPrice(product.getPrice());  // Set the price
+            cartRepository.save(cart);
+        }
+    }
+    @Transactional
+    // Remove product from cart
+    public void removeProductFromCart(Long buyerId, Product product) {
+        Buyer buyer = buyerRepository.findById(buyerId)
+                .orElseThrow(() -> new RuntimeException("Buyer not found"));
+        cartRepository.deleteByBuyerAndProduct_ProductId(buyer, product.getProductId());
     }
 
-    public void addToCart(Buyer buyer, Long productId, double price, int quantity, Seller seller) {
-        // Create a new cart item
-        Cart cart = new Cart();
-        cart.setBuyer(buyer);
-        cart.setProductId(productId);
-        cart.setPrice(price);
-        cart.setQuantity(quantity);
-        cart.setSeller(seller);
+	public List<Cart> findAllByBuyer(Buyer buyer) {
+		// TODO Auto-generated method stub
+		return cartRepository.findAllByBuyer(buyer);
+	}
 
-        cartRepository.save(cart);
-    }
-
-    public void removeFromCart(Buyer buyer, Long productId) {
-        // Remove the cart item based on the buyer and product
-        cartRepository.deleteByBuyerAndProductId(buyer, productId);
-    }
-
-    public List<Cart> getCartItemsForBuyer(Buyer buyer) {
-        // Fetch all cart items for the buyer
-        return cartRepository.findAllByBuyer(buyer);
-    }
+	public boolean existsByBuyerAndProduct_ProductId(Buyer buyer, Long productId) {
+		// TODO Auto-generated method stub
+		return cartRepository.existsByBuyerAndProduct_ProductId(buyer, productId);
+	}
 }

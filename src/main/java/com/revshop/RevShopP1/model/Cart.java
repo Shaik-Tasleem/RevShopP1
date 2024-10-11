@@ -21,7 +21,10 @@ public class Cart {
     @JoinColumn(name = "sellerId", nullable = false)
     private Seller seller;
 
-    private Long productId;
+    @ManyToOne
+    @JoinColumn(name = "productId", nullable = false)
+    private Product product;
+    
 
     // Getters and Setters
     public Long getCartId() {
@@ -64,11 +67,11 @@ public class Cart {
         this.seller = seller;
     }
 
-    public Long getProductId() {
-        return productId;
-    }
+	public Product getProduct() {
+		return product;
+	}
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
+	public void setProduct(Product product) {
+		this.product = product;
+	}
 }

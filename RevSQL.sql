@@ -30,4 +30,6 @@ insert into category values(25,'Watches');
 insert into category values(26,'Shoes');
 select * from product;
 select * from cart;
+select * from buyer;
+select * from wishlist;
 desc product;

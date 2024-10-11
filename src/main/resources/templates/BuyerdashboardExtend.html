@@ -425,119 +425,136 @@ button:hover {
     </style>
 </head>
 <body>
- <header>
-        <div class="logo"><img th:src="@{/images/revshop-logo.jpg}"><span></span></div>
-      
-        <form action="/search" method="post">
-            <input type="text" name="keyword" placeholder="Search for products..." 
-                   th:value="${keyword}" /><span></span>
-            
-            <button type="submit" class="btn btn-light"> <i class="fa-solid fa-magnifying-glass"></i></button>
-            </form> </div>
-       
-        <div class="account-cart">
-            <div class="dropdown">
-                <button class="account-icon">
-                    <span>
-                        <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/profile-52e0dc.svg" alt="profile">
-                    </span> profile
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="MyProfile.html">My Profile</a></li>
-                    <li><a href="Order.html">Orders</a></li>
-                    <li><a href="Wishlist.html">Wishlist</a></li>
-                    
-                    <li><a href="#">Logout</a></li>
-                </ul>
-            </div>
-            <button class="cart-icon"><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg" alt="Cart"> <span>Cart</span></button>
-            <button class="account-icon"><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/Store-9eeae2.svg" alt="Become a Seller"> <span>Become a Seller</span></button>
-            <button class="account-icon"><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/helpcenter-7d90c0.svg" > </button>
-        </div>
-    </header>  
+ <body>
+<header>
+    <div class="logo">
+        <img th:src="@{/images/revshop-logo.jpg}" alt="Logo">
+    </div>
 
-  <main>
+    <form action="/search" method="post">
+        <input type="text" name="keyword" placeholder="Search for products..." th:value="${keyword}"/>
+        <button type="submit" class="btn btn-light">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+    </form>
+
+    <div class="account-cart">
+        <div class="dropdown">
+            <button class="account-icon">
+                <span>
+                    <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/profile-52e0dc.svg" alt="Profile">
+                </span> profile
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="MyProfile.html">My Profile</a></li>
+                <li><a href="Order.html">Orders</a></li>
+                <li><a th:href="@{/ecom/wishlist/view}">Wishlist</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </div>
+        <a th:href="@{/ecom/cart/view}">
+        <button class="cart-icon">
+            <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/header_cart-eed150.svg" alt="Cart"> <span>Cart</span>
+        </button>
+        </a>
+    </div>
+</header>
+
+<main>
     <div class="container mt-5">
         <h1 class="text-center">Product List</h1>
         <div class="row">
             <div th:each="product : ${products}" class="col-md-4">
                 <div class="card mb-4" th:id="'product-' + ${product.productId}">
-                    <!-- Wrap the image in an anchor tag -->
                     <a th:href="@{/products/{id}(id=${product.productId})}">
                         <img th:src="@{${product.image}}" class="card-img-top" alt="Product Image">
                     </a>
                     <div class="card-body">
                         <h5 class="card-title" th:text="${product.productName}">Product Name</h5>
                         <p class="card-text" th:text="${product.productDescription}">Product Description</p>
-                        <p class="card-text"><strong th:text="'Price: $' + ${product.price}">Price: $XX.XX</strong></p>
-                        <!-- Add to Cart Button -->
-                        <button class="btn btn-primary add-to-cart-btn" data-product-id="${product.productId}" data-seller-id="${product.seller.sellerId}">
-    						<i class="fa fa-cart-plus"></i> Add to Cart
-						</button>
-                        <span class="favorite-icon" onclick="toggleFavorite(this)" style="cursor: pointer;">&#10084;</span>
+                        <p class="card-text">
+                            <strong th:text="'Price: $' + ${product.price}">Price: $XX.XX</strong>
+                        </p>
+
+                        <button class="btn" id="cart-btn-[[${product.productId}]]" 
+        th:class="${#lists.contains(cartItems, product.productId) ? 'btn-danger' : 'btn-outline-danger'}"
+        th:onclick="toggleCart([[${product.productId}]])">
+    <i th:class="${#lists.contains(cartItems, product.productId) ? 'fas fa-shopping-cart' : 'far fa-shopping-cart'}"></i>
+    <span th:text="${#lists.contains(cartItems, product.productId) ? 'Remove from Cart' : 'Add to Cart'}"></span>
+</button>
+
+<button class="wishlist-btn" id="wishlist-btn-[[${product.productId}]]"
+        th:class="${#lists.contains(wishlistItems, product.productId) ? 'fas fa-heart' : 'far fa-heart'}"
+        th:onclick="toggleWishlist([[${product.productId}]])">
+</button>
+                  
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
-
-<footer>
-    <div class="footer-section">
-        <h3>Contact Us:</h3>
-        <address>
-            Revature <br>
-            Workafella, 12th floor <br>
-            Tech Park Area,<br>
-            Chennai,<br>
-            TN, India<br>
-        </address>
-    </div>
-    <div class="footer-section">
-        <p>Email: <a href="mailto:info@yourcompany.com">info@yourcompany.com</a></p>
-        <p>Phone: <a href="tel:+1234567890">+91912345678</a></p>
-        <p>© 2024 All rights are reserved, RevShop.</p>
-    </div>
-    <div class="footer-social-img">
-        <h3>Follow Us</h3>
-        <a href="#" aria-label="Facebook"><img src="data:image/svg+xml;base64,...FacebookIcon..."></a>
-        <a href="#" aria-label="Twitter"><img src="data:image/svg+xml;base64,...TwitterIcon..."></a>
-        <a href="#" aria-label="YouTube"><img src="...YouTubeIcon..."></a>
-    </div>
-</footer>
-
 <script>
-    function toggleFavorite(element) {
-        element.classList.toggle('red');
-    }
-
-    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default anchor behavior
-
-            const productId = this.getAttribute('data-product-id');
-            const sellerId = this.getAttribute('data-seller-id');
-
-            // AJAX request to add the product to the cart
-            fetch(`/cart/toggle?productId=${productId}&sellerId=${sellerId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Product added to cart successfully!');
+    function toggleCart(productId) {
+        fetch(`/ecom/toggle?productId=${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update button text and icon dynamically
+                window.location.reload(); 
+                const button = document.getElementById(`cart-btn-${productId}`);
+                const isInCart = button.classList.contains('btn-danger');
+                if (isInCart) {
+                    button.classList.remove('btn-danger');
+                    button.classList.add('btn-outline-danger');
+                    button.querySelector('i').classList.remove('fas');
+                    button.querySelector('i').classList.add('far');
+                    button.querySelector('span').innerText = 'Add to Cart';
                 } else {
-                    alert('Failed to add product to cart.');
+                    button.classList.remove('btn-outline-danger');
+                    button.classList.add('btn-danger');
+                    button.querySelector('i').classList.remove('far');
+                    button.querySelector('i').classList.add('fas');
+                    button.querySelector('span').innerText = 'Remove from Cart';
                 }
-            })
-            .catch(error => {
-                console.error('Error adding product to cart:', error);
-            });
-        });
-    });
+            } else {
+                alert('Failed to update cart');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    function toggleWishlist(productId) {
+        fetch(`/ecom/wishlist/toggle?productId=${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+            	window.location.reload(); 
+                const button = document.getElementById(`wishlist-btn-${productId}`);
+                const isInWishlist = button.classList.contains('fas'); // 'fas' indicates a filled heart
+                if (isInWishlist) {
+                    button.classList.remove('fas');
+                    button.classList.add('far'); // 'far' indicates an empty heart
+                } else {
+                    button.classList.remove('far');
+                    button.classList.add('fas');
+                }
+            } else {
+                alert('Failed to update wishlist');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
 </script>
 
