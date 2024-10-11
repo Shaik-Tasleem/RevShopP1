@@ -1,71 +1,54 @@
-//package com.revshop.RevShopP1.model;
-//
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.GeneratedValue;
-//import jakarta.persistence.GenerationType;
-//import jakarta.persistence.Id;
-//import jakarta.persistence.JoinColumn;
-//import jakarta.persistence.ManyToOne;
-//import jakarta.persistence.Table;
-//
-//@Entity
-//@Table(name = "reviews")
-//public class Review {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long reviewId;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "buyerId", nullable = false)
-//    private Buyer buyer;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "productId", nullable = false)
-//    private Product product;
-//
-//    private int rating; // Store rating as a number (1-5 stars)
-//
-//    private String comment; // The buyer's review
-//
-//    // Getters and setters
-//    public Long getReviewId() {
-//        return reviewId;
-//    }
-//
-//    public void setReviewId(Long reviewId) {
-//        this.reviewId = reviewId;
-//    }
-//
-//    public Buyer getBuyer() {
-//        return buyer;
-//    }
-//
-//    public void setBuyer(Buyer buyer) {
-//        this.buyer = buyer;
-//    }
-//
-//    public Product getProduct() {
-//        return product;
-//    }
-//
-//    public void setProduct(Product product) {
-//        this.product = product;
-//    }
-//
-//    public int getRating() {
-//        return rating;
-//    }
-//
-//    public void setRating(int rating) {
-//        this.rating = rating;
-//    }
-//
-//    public String getComment() {
-//        return comment;
-//    }
-//
-//    public void setComment(String comment) {
-//        this.comment = comment;
-//    }
-//}
+package com.revshop.RevShopP1.model;
+
+import jakarta.persistence.*;
+
+@Entity
+public class Review {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private Long buyerId;
+    public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Long getBuyerId() {
+		return buyerId;
+	}
+	public void setBuyerId(Long buyerId) {
+		this.buyerId = buyerId;
+	}
+	public Long getProductId() {
+		return productId;
+	}
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+	public Long getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public int getRating() {
+		return rating;
+	}
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+	private Long productId;
+    private Long orderId;
+    private String content; // Review content
+    private int rating; // Rating out of 5
+
+    // Getters and setters
+}

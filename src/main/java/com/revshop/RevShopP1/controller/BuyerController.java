@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.revshop.RevShopP1.model.*;
 import com.revshop.RevShopP1.model.Product;
+import com.revshop.RevShopP1.repository.ReviewRepository;
 import com.revshop.RevShopP1.service.BuyerService;
 import com.revshop.RevShopP1.service.CartService;
 import com.revshop.RevShopP1.service.EmailService;
 import com.revshop.RevShopP1.service.OrderService;
 import com.revshop.RevShopP1.service.ProductService;
+import com.revshop.RevShopP1.service.ReviewService;
 import com.revshop.RevShopP1.service.WishlistService;
 import com.revshop.RevShopP1.utils.PasswordUtils;
 
@@ -46,7 +48,9 @@ public class BuyerController {
     private PasswordUtils pwd_obj;
     @Autowired
     private OrderService orderService;
-
+    @Autowired
+    private ReviewService reviewService;
+   
     @GetMapping("/buyerRegistration")
     public String registrationForm(Model model) {
         model.addAttribute("buyer", new Buyer());
@@ -279,7 +283,7 @@ public class BuyerController {
 	    return "checkout"; // Render checkout view
 	}
 	@PostMapping("/checkout/confirm")
-	public String confirmCheckout(HttpServletRequest request, Model model) {
+	public String confirmCheckout( @RequestParam String paymentMethod,HttpServletRequest request, Model model) {
 	    Long buyerId = getBuyerIdFromCookies(request);
 	    Buyer buyer = buyerService.findBuyerDetailsById(buyerId);
 
@@ -307,6 +311,7 @@ public class BuyerController {
 	        
 	        model.addAttribute("orderSummary", cartItems);
 	        model.addAttribute("totalPrice", totalPrice);
+	        model.addAttribute("paymentMethod", paymentMethod);
 	        model.addAttribute("buyer", buyer);
 	    }
 	    
@@ -319,6 +324,35 @@ public class BuyerController {
         model.addAttribute("orders", orders);
         return "buyer-orders"; // The Thymeleaf template where orders will be displayed
     } //ecom/buyer/id for all orders 
+    
+    @GetMapping("/review/add")
+    public String showAddReviewForm(@RequestParam Long buyerId, @RequestParam Long productId, @RequestParam Long orderId, Model model) {
+        // Add necessary attributes to the model
+        model.addAttribute("buyerId", buyerId);
+        model.addAttribute("productId", productId);
+        model.addAttribute("orderId", orderId);
+        return "addReview"; // Return the name of the view for the review form
+    }
+    @PostMapping("/review/submit")
+    public String submitReview(@RequestParam Long buyerId,
+                                @RequestParam Long productId,
+                                @RequestParam Long orderId,
+                                @RequestParam String content,
+                                @RequestParam int rating) {
+        Review review = new Review();
+        review.setBuyerId(buyerId);
+        review.setProductId(productId);
+        review.setOrderId(orderId);
+        review.setContent(content);
+        review.setRating(rating);
+
+        reviewService.saveReview(review); // Save the review to the database
+
+        return "redirect:/ecom/buyerdashboard"; // Redirect to orders page after submission
+    }
+    
+    
+
 
 
 }
