@@ -1,5 +1,7 @@
 package com.revshop.RevShopP1.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,5 +17,8 @@ public class OrderService {
     // Method to save an order
     public void saveOrder(Orders order) {
         orderRepository.save(order);
+    }
+    public List<Orders> getOrdersByBuyerId(Long buyerId) {
+        return orderRepository.findByBuyer_BuyerId(buyerId);
     }
 }

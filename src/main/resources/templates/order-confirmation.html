@@ -85,6 +85,7 @@
 <div class="order-details">
     <p><strong>Payment Method:</strong> <span th:text="${paymentMethod}"></span></p>
 </div>
+<a th:href="@{/ecom/buyer/{buyerId}(buyerId=${buyer.buyerId})}" class="view-orders-btn">View All Orders</a>
 
 </body>
 </html>

@@ -76,6 +76,8 @@ public class CartController {
 
         return "redirect:/ecom/cart/view";
     }
+    
+    
 
     // View cart items
 
@@ -126,4 +128,24 @@ public class CartController {
         }
         return null;
     }
+//    @GetMapping("/cart/view")
+//    public String viewCart(Model model, HttpServletRequest request) {
+//        // Retrieve buyerId from cookies
+//        Long buyerId = getBuyerIdFromCookies(request);
+//
+//        // Ensure buyerId is available
+//        if (buyerId != null) {
+//            // Fetch all cart items for the buyer
+//            List<Cart> cartItems = cartService.getCartByBuyer(buyerId);
+//
+//            // Add cart items to the model
+//            model.addAttribute("cartItems", cartItems);
+//        } else {
+//            // If no buyerId is found, redirect or show an empty cart
+//            model.addAttribute("cartItems", List.of());
+//        }
+//
+//        // Return the Thymeleaf view for the cart (assuming it's named "cart.html")
+//        return "cart-view";
+//    }
 }

@@ -312,6 +312,13 @@ public class BuyerController {
 	    
 	    return "order-confirmation"; // Return order confirmation page
 	}
+	
+    @GetMapping("/buyer/{buyerId}")
+    public String getOrdersByBuyer(@PathVariable Long buyerId, Model model) {
+        List<Orders> orders = orderService.getOrdersByBuyerId(buyerId);
+        model.addAttribute("orders", orders);
+        return "buyer-orders"; // The Thymeleaf template where orders will be displayed
+    } //ecom/buyer/id for all orders 
 
 
 }

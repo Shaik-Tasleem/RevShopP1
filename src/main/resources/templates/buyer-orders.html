@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Orders</title>
+</head>
+<body>
+    <h1>Orders for Buyer</h1>
+
+    <div>
+        <h3>Your Orders</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through the orders and display them -->
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.orderId}"></td>
+                    
+                    <td th:text="${order.totalPrice}"></td>
+                    <td th:text="${order.status}"></td>
+                   
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- If there are no orders -->
+        <div th:if="${orders.size() == 0}">
+            <p>No orders found.</p>
+        </div>
+    </div>
+</body>
+</html>
