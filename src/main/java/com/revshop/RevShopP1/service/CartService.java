@@ -61,4 +61,8 @@ public class CartService {
 		// TODO Auto-generated method stub
 		return cartRepository.existsByBuyerAndProduct_ProductId(buyer, productId);
 	}
+	public void clearCartForBuyer(Buyer buyer) {
+        List<Cart> cartItems = cartRepository.findAllByBuyer(buyer);
+        cartRepository.deleteAll(cartItems);  // Deletes all items for the buyer
+    }
 }

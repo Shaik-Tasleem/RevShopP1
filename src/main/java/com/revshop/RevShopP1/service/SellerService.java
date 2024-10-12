@@ -52,7 +52,7 @@ public class SellerService {
 	    Seller seller = sellerRepo.findByEmail(email);
 	    if (seller != null) {
 	        // Hash the new password before saving
-	        seller.setPassword(pwd_obj.hashPassword(newPassword));
+	        seller.setPassword(newPassword);
 	        sellerRepo.save(seller);  // Save the updated seller to the database
 	    }
 	}

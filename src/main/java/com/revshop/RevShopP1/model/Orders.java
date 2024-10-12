@@ -27,8 +27,16 @@ public class Orders {
     private String shippingAddress;
     private String status;
     private LocalDate orderDate;
+    private int quantity;
+    public int getQuantity() {
+		return quantity;
+	}
 
-    // Getters and Setters
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	// Getters and Setters
     public Long getOrderId() {
         return orderId;
     }

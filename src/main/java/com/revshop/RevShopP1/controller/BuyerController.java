@@ -1,6 +1,7 @@
 package com.revshop.RevShopP1.controller;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,12 @@ public class BuyerController {
 	@Autowired
 	private WishlistService wishService;
 
+	@Autowired
+	private OrderService orderService;
+	
+	@Autowired
+	private ReviewService reviewService;
+	
 	@GetMapping("/buyerRegistration")
 	public String registrationForm(Model model) {
 		model.addAttribute("buyer", new Buyer());
@@ -490,4 +497,92 @@ public class BuyerController {
 	public String showDashboard() {
 		return "BuyerdashboardExtend";
 	}
+	@PostMapping("/cart/buyNow")
+	public String checkout(Model model, HttpServletRequest request) {
+	    Long buyerId = getBuyerIdFromCookies(request);
+	    Buyer buyer = buyerService. getBuyerDetailsById(buyerId);
+	    
+	    if (buyer != null) {
+	        List<Cart> cartItems = cartService.findAllByBuyer(buyer);
+	        double totalPrice = cartItems.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum();
+	        
+	        model.addAttribute("cartItems", cartItems);
+	        model.addAttribute("totalPrice", totalPrice);
+	        model.addAttribute("buyer", buyer); // Display buyer's shipping info
+	    }
+	    
+	    return "checkout"; // Render checkout view
+	}
+	@PostMapping("/checkout/confirm")
+	public String confirmCheckout( @RequestParam String paymentMethod,HttpServletRequest request, Model model) {
+	    Long buyerId = getBuyerIdFromCookies(request);
+	    Buyer buyer = buyerService. getBuyerDetailsById(buyerId);
+
+	    if (buyer != null) {
+	        List<Cart> cartItems = cartService.findAllByBuyer(buyer);
+	        double totalPrice = cartItems.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum();
+	        
+	        // Save order for each cart item
+	        for (Cart cartItem : cartItems) {
+	            Orders order = new Orders();
+	            order.setOrderDate(LocalDate.now());
+	            order.setBuyer(buyer);
+	            order.setProduct(cartItem.getProduct());
+	            order.setSeller(cartItem.getSeller()); // Store seller information
+	            order.setQuantity(cartItem.getQuantity());
+	            order.setShippingAddress(buyer.getStreet()+buyer.getCity()+buyer.getState()+buyer.getCountry());
+	            order.setTotalPrice(cartItem.getProduct().getPrice() * cartItem.getQuantity());
+	            order.setStatus("Processing"); // Initial status of the order
+	            orderService.saveOrder(order);
+	        }
+	        
+	        // Optionally clear the cart after order is placed
+	        cartService.clearCartForBuyer(buyer);
+	        
+
+	        
+	        model.addAttribute("orderSummary", cartItems);
+	        model.addAttribute("totalPrice", totalPrice);
+	        model.addAttribute("paymentMethod", paymentMethod);
+	        model.addAttribute("buyer", buyer);
+	    }
+	    
+	    return "order-confirmation"; // Return order confirmation page
+	}
+	
+    @GetMapping("/buyer/{buyerId}")
+    public String getOrdersByBuyer(@PathVariable Long buyerId, Model model) {
+        List<Orders> orders = orderService.getOrdersByBuyerId(buyerId);
+        model.addAttribute("orders", orders);
+        return "buyer-orders"; // The Thymeleaf template where orders will be displayed
+    } //ecom/buyer/id for all orders 
+    
+    @GetMapping("/review/add")
+    public String showAddReviewForm(@RequestParam Long buyerId, @RequestParam Long productId, @RequestParam Long orderId, Model model) {
+        // Add necessary attributes to the model
+        model.addAttribute("buyerId", buyerId);
+        model.addAttribute("productId", productId);
+        model.addAttribute("orderId", orderId);
+        return "addReview"; // Return the name of the view for the review form
+    }
+    @PostMapping("/review/submit")
+    public String submitReview(@RequestParam Long buyerId,
+                                @RequestParam Long productId,
+                                @RequestParam Long orderId,
+                                @RequestParam String content,
+                                @RequestParam int rating) {
+    	Buyer buyer=buyerService.getBuyerDetailsById(buyerId);
+    	Product product=productService.findById(productId);
+        Review review = new Review();
+        review.setBuyer(buyer);
+        review.setProduct(product);
+        review.setOrderId(orderId);
+        review.setContent(content);
+        review.setRating(rating);
+        review.setSeller(product.getSeller());
+        review.setReviewDate(LocalDate.now());
+        reviewService.saveReview(review); // Save the review to the database
+
+        return "redirect:/ecom/buyerdashboard"; // Redirect to orders page after submission
+    }
 }

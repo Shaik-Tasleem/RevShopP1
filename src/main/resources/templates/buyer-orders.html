@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1, h3 {
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f7f7f7;
+            color: #2c3e50;
+        }
+
+        td {
+            background-color: #ffffff;
+        }
+
+        img {
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Orders for Buyer</h1>
+        <h3>Your Orders</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Product Image</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Review</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through the orders and display them -->
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.orderId}"></td>
+                    <td>
+                        <img th:src="${order.product.image}" alt="Product Image" width="50" height="50"/>
+                    </td>
+                    <td th:text="${order.product.productName}"></td>
+                    <td th:text="${order.product.price}"></td>
+                    <td th:text="${order.totalPrice}"></td>
+                    <td th:text="${order.status}"></td>
+                    <td>
+                        <!-- Add Review Button -->
+                         <a th:href="@{/ecom/review/add(buyerId=${buyerId}, productId=${order.product.productId}, orderId=${order.orderId})}" 
+       style="text-decoration: none;">
+        <button>
+            Add Review
+        </button>
+    </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- If there are no orders -->
+        <div th:if="${orders.size() == 0}" class="no-orders">
+            <p>No orders found.</p>
+        </div>
+    </div>
+</body>
+</html>

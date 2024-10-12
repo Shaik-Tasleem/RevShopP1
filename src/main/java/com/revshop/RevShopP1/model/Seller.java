@@ -25,6 +25,16 @@ public class Seller implements Serializable {
 
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
 	private List<Cart> cart = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+	private List<Review> reviews = new ArrayList<>();
+	public List<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
+	}
 
 	private String firstName;
 	private String lastName;

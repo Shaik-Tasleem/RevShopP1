@@ -10,6 +10,5 @@ import com.revshop.RevShopP1.model.*;
 public interface WishlistRepository extends JpaRepository<Wishlist,Long> {
 	boolean existsByBuyerAndProduct_ProductId(Buyer buyer, Long productId);
 	void deleteByBuyerAndProduct_ProductId(Buyer buyer, Long productId);
-
 	List<Wishlist> findAllByBuyer(Buyer buyer);
 }

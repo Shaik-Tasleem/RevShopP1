@@ -87,6 +87,7 @@ public class ForgotPasswordController {
         }
         else if(userType.equals("seller")) {
         	sellerService.updateSellerPassword(em, pwd_obj.hashPassword(newPassword));
+        	
         }
         model.addAttribute("message", "Password reset successfully.");
         return "LoginPage";  // Redirect to the login page after success

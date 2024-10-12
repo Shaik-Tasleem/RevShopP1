@@ -13,19 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
-import com.revshop.RevShopP1.model.Seller;
-
 import com.revshop.RevShopP1.model.*;
 
-import com.revshop.RevShopP1.service.EmailService;
-import com.revshop.RevShopP1.service.ProductService;
-import com.revshop.RevShopP1.service.SellerService;
+import com.revshop.RevShopP1.service.*;
 import com.revshop.RevShopP1.utils.PasswordUtils;
 
 import jakarta.servlet.http.Cookie;
@@ -48,6 +44,11 @@ public class SellerController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private OrderService orderService;
+    
+    @Autowired 
+    private ReviewService reviewService;
     private static final Logger logger = LoggerFactory.getLogger(SellerController.class);
 
     // Registration form
@@ -111,7 +112,6 @@ public class SellerController {
         } else if (mobileNumber != null) {
             seller_obj = sellerService.getSellerDetailsByMobileNumber(mobileNumber);
         }
-
         if (seller_obj == null || !seller_obj.getPassword().equals(pwd_obj.hashPassword(password))) {
             logger.warn("Login failed for email: {} or mobileNumber: {}", email, mobileNumber);
             String msg = "Invalid Email or Password...\nIf you are a new user kindly register to access our services.";
@@ -216,7 +216,6 @@ public class SellerController {
                                     @RequestParam("lastName") String lastName,
                                     @RequestParam("email") String email,
                                     @RequestParam("mobileNumber") String mobileNumber,
-                                    @RequestParam("businessName") String businessName,
                                     HttpServletRequest request, 
                                     HttpServletResponse response, 
                                     Model model) {
@@ -257,7 +256,6 @@ public class SellerController {
         existingSeller.setLastName(lastName);
         existingSeller.setEmail(email);
         existingSeller.setMobileNumber(mobileNumber);
-        existingSeller.setBussinessName(businessName);
         sellerService.updateSellerProfile(existingSeller);
         logger.info("Seller profile updated successfully for ID: {}", sellerId);
 
@@ -362,6 +360,64 @@ public class SellerController {
         // Return the product management view
         return "manageProducts";
     }
+    @GetMapping("/viewOrders")
+    public String getOrdersByBuyer(Model model,HttpServletRequest request) {
+    	String sellerIdStr = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("sellerId")) {
+                    sellerIdStr = cookie.getValue();
+                    break;
+                }
+            }
+        }
 
+        if (sellerIdStr == null) {
+            logger.warn("sellerId cookie not found during profile update, redirecting to login.");
+            return "redirect:/ecom/LoginPage";
+        }
+
+        Long sellerId;
+        try {
+            sellerId = Long.parseLong(sellerIdStr);
+        } catch (NumberFormatException e) {
+            logger.error("Invalid sellerId in cookie during profile update: {}", sellerIdStr);
+            return "redirect:/ecom/LoginPage";
+        }
+        List<Orders> orders = orderService.getOrdersBySellerId(sellerId);
+        model.addAttribute("orders", orders);
+        return "seller-orders"; // The Thymeleaf template where orders will be displayed
+    } 
+    @GetMapping("/review/see")
+    public String seeReviews(@RequestParam Long productId, @RequestParam Long orderId, Model model,HttpServletRequest request) {
+    	String sellerIdStr = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("sellerId")) {
+                    sellerIdStr = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (sellerIdStr == null) {
+            logger.warn("sellerId cookie not found during profile update, redirecting to login.");
+            return "redirect:/ecom/LoginPage";
+        }
+
+        Long sellerId;
+        try {
+            sellerId = Long.parseLong(sellerIdStr);
+        } catch (NumberFormatException e) {
+            logger.error("Invalid sellerId in cookie during profile update: {}", sellerIdStr);
+            return "redirect:/ecom/LoginPage";
+        }
+        
+        List<Review> reviews = reviewService.getReviewsForSeller(sellerId,productId,orderId);
+        model.addAttribute("reviews", reviews);
+        return "seeReviews"; // Thymeleaf template name to display reviews
+    }
 
 }

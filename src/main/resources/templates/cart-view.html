@@ -198,7 +198,7 @@ header {
 
 		<div class="footer-buttons">
 			<button type="button" class="btn btn-secondary" onclick="goBack()">Cancel</button>
-			<form th:action="@{/ecom/cart/buyNow/{productId}(productId=${item.product.productId})}}" method="post">
+			<form th:action="@{/ecom/cart/buyNow}" method="post">
 				<button type="submit" class="btn btn-primary">Buy Now</button>
 			</form>
 		</div>
