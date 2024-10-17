@@ -38,6 +38,7 @@ public class Product {
     @OneToMany(mappedBy="product",cascade = CascadeType.ALL)
     private List<Wishlist> review=new ArrayList<>();
     
+    
 
 //	public List<Wishlist> getReview() {
 //		return review;

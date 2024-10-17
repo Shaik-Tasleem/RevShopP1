@@ -1,43 +1,65 @@
 package com.revshop.RevShopP1.model;
 
-import jakarta.persistence.*;
+
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Review {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    private Long buyerId;
-    public Long getId() {
-		return id;
+	
+	@Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long review_id;
+	@ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+	@ManyToOne
+	@JoinColumn(name = "buyer_id", nullable = false)
+	private Buyer buyer;
+	@Column(columnDefinition = "TEXT")
+	private String comment;
+	private int rating;
+	
+	
+	public Review() {}
+	public Review(Long review_id,  Product product, Buyer buyer, String comment,
+			int rating) {
+		super();
+		this.review_id = review_id;
+		this.product = product;
+		this.buyer = buyer;
+		this.comment = comment;
+		this.rating = rating;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public Long getReview_id() {
+		return review_id;
 	}
-	public Long getBuyerId() {
-		return buyerId;
+	public void setReview_id(Long review_id) {
+		this.review_id = review_id;
 	}
-	public void setBuyerId(Long buyerId) {
-		this.buyerId = buyerId;
+	public Product getProduct() {
+		return product;
 	}
-	public Long getProductId() {
-		return productId;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	public Buyer getBuyer() {
+		return buyer;
 	}
-	public Long getOrderId() {
-		return orderId;
+	public void setBuyer(Buyer buyer) {
+		this.buyer = buyer;
 	}
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
+	public String getComment() {
+		return comment;
 	}
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	public int getRating() {
 		return rating;
@@ -45,10 +67,7 @@ public class Review {
 	public void setRating(int rating) {
 		this.rating = rating;
 	}
-	private Long productId;
-    private Long orderId;
-    private String content; // Review content
-    private int rating; // Rating out of 5
+	
+	
 
-    // Getters and setters
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,6 +35,7 @@ import com.revshop.RevShopP1.utils.PasswordUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
 @Controller
@@ -351,52 +353,96 @@ public class BuyerController {
 	}
 	
 	
+	
+	/*
+	@GetMapping("/view")
+    public String viewOrderHistory(HttpSession session, Model model) {
+		Long customerId = (Long) session.getAttribute("customerId");
+		Customer customer = customerService.getCustomerByCustomerId(customerId);
+        List<Order_Detail> orders = orderdetailService.getOrdersByCustomerId(customerId);
+        List<Boolean> orderReviewStatuses = new ArrayList<>();
+        
+        for (Order_Detail order : orders) {
+	        boolean reviewExists = reviewService.existsByCustomerAndProduct(customer, order.getProduct());
+	        orderReviewStatuses.add(reviewExists);
+	    }
+        
+        // Add the orders to the model
+        model.addAttribute("orders", orders);
+        model.addAttribute("reviews", orderReviewStatuses);
+        return "Customer_OrderHistory";
+    }
     
-    
+    */
     
     @GetMapping("/buyer/{buyerId}")
     public String getOrdersByBuyer(@PathVariable Long buyerId, Model model) {
         List<Orders> ordersItem = orderService.getOrdersByBuyerId(buyerId);
+        Buyer buyer=buyerService.findBuyerDetailsById(buyerId);
         List<Order_Detail> orders = new ArrayList<>();
+        List<Boolean> orderReviewStatuses = new ArrayList<>();
+        
+        
+
         
         // Collect all Order_Detail records associated with the buyer's orders
         for (Orders order : ordersItem) {
             List<Order_Detail> singleOrderDetails = orderdetailService.getOrderDetailByOrderId(order.getTransaction_id());
             orders.addAll(singleOrderDetails); // Correct way to add lists
+            
         }
+        for (Order_Detail order : orders) {
+	        boolean reviewExists = reviewService.existsByCustomerAndProduct(buyer, order.getProduct());
+	        orderReviewStatuses.add(reviewExists);
+	    }
         model.addAttribute("orders", orders);
+        model.addAttribute("reviews", orderReviewStatuses);
         model.addAttribute("buyerId",buyerId);
         return "buyer-orders"; // Render the view showing buyer's orders
     }
 
-    @GetMapping("/review/add")
-    public String showAddReviewForm(@RequestParam Long buyerId, @RequestParam Long productId, @RequestParam Long orderId, Model model) {
-        // Add necessary attributes to the model
-        model.addAttribute("buyerId", buyerId);
-        model.addAttribute("productId", productId);
-        model.addAttribute("orderId", orderId);
-        return "addReview"; // Return the name of the view for the review form
+//    @GetMapping("/review/add")
+//    public String showAddReviewForm(@RequestParam Long buyerId, @RequestParam Long productId, @RequestParam Long orderId, Model model) {
+//        // Add necessary attributes to the model
+//        model.addAttribute("buyerId", buyerId);
+//        model.addAttribute("productId", productId);
+//        model.addAttribute("orderId", orderId);
+//        return "addReview"; // Return the name of the view for the review form
+//    }
+    
+    
+    @PostMapping("/review/add")
+    public ResponseEntity<Map<String, Object>> submitReview(
+            @RequestBody Map<String, Object> reviewData, HttpServletRequest request ) {
+        Long productId = Long.valueOf(reviewData.get("productId").toString());
+        Integer rating = Integer.valueOf(reviewData.get("rating").toString());
+        String comment = (String) reviewData.get("comment");
+        Product product = productService.getProductById(productId);
+        
+        
+    	    Long buyerId = getBuyerIdFromCookies(request);
+
+	    Buyer buyer = buyerService.findBuyerDetailsById(buyerId);
+        
+        Buyer customer = buyerService.findBuyerDetailsById(buyerId);
+        Map<String, Object> response = new HashMap<>();
+        try {
+            boolean success = reviewService.submitReview(product, customer, rating, comment);
+            response.put("success", success);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
     }
-    @PostMapping("/review/submit")
-    public String submitReview(@RequestParam Long buyerId,
-                                @RequestParam Long productId,
-                                @RequestParam Long orderId,
-                                @RequestParam String content,
-                                @RequestParam int rating) {
-        Review review = new Review();
-        review.setBuyerId(buyerId);
-        review.setProductId(productId);
-        review.setOrderId(orderId);
-        review.setContent(content);
-        review.setRating(rating);
+    
 
-        reviewService.saveReview(review); // Save the review to the database
-
-        return "redirect:/ecom/buyerdashboard"; // Redirect to orders page after submission
+    
+    
     }
     
     
 
 
 
-}
