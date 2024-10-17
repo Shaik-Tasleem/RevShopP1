@@ -83,7 +83,6 @@
                     <th>Product Image</th>
                     <th>Product Name</th>
                     <th>Price</th>
-                    <th>Total Amount</th>
                     <th>Status</th>
                     <th>Review</th>
                 </tr>
@@ -91,17 +90,16 @@
             <tbody>
                 <!-- Loop through the orders and display them -->
                 <tr th:each="order : ${orders}">
-                    <td th:text="${order.orderId}"></td>
+                    <td th:text="${order.order_detail_id}"></td>
                     <td>
                         <img th:src="${order.product.image}" alt="Product Image" width="50" height="50"/>
                     </td>
                     <td th:text="${order.product.productName}"></td>
                     <td th:text="${order.product.price}"></td>
-                    <td th:text="${order.totalPrice}"></td>
                     <td th:text="${order.status}"></td>
                     <td>
                         <!-- Add Review Button -->
-                         <a th:href="@{/ecom/review/add(buyerId=${buyerId}, productId=${order.product.productId}, orderId=${order.orderId})}" 
+                         <a th:href="@{/ecom/review/add(buyerId=${buyerId}, productId=${order.product.productId}, orderId=${order.order_detail_id})}" 
        style="text-decoration: none;">
         <button>
             Add Review

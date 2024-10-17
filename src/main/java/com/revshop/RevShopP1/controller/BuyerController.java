@@ -1,6 +1,7 @@
 package com.revshop.RevShopP1.controller;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.*;
 
@@ -24,6 +25,7 @@ import com.revshop.RevShopP1.service.BuyerService;
 import com.revshop.RevShopP1.service.CartService;
 import com.revshop.RevShopP1.service.EmailService;
 import com.revshop.RevShopP1.service.OrderService;
+import com.revshop.RevShopP1.service.OrderdetailService;
 import com.revshop.RevShopP1.service.ProductService;
 import com.revshop.RevShopP1.service.ReviewService;
 import com.revshop.RevShopP1.service.WishlistService;
@@ -32,6 +34,7 @@ import com.revshop.RevShopP1.utils.PasswordUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 
 @Controller
 @RequestMapping("/ecom")
@@ -48,6 +51,10 @@ public class BuyerController {
     private PasswordUtils pwd_obj;
     @Autowired
     private OrderService orderService;
+    
+    
+    @Autowired
+    private OrderdetailService orderdetailService;
     @Autowired
     private ReviewService reviewService;
    
@@ -282,49 +289,86 @@ public class BuyerController {
 	    
 	    return "checkout"; // Render checkout view
 	}
+	
+	@Transactional
 	@PostMapping("/checkout/confirm")
 	public String confirmCheckout( @RequestParam String paymentMethod,HttpServletRequest request, Model model) {
 	    Long buyerId = getBuyerIdFromCookies(request);
 	    Buyer buyer = buyerService.findBuyerDetailsById(buyerId);
-
 	    if (buyer != null) {
-	        List<Cart> cartItems = cartService.findAllByBuyer(buyer);
-	        double totalPrice = cartItems.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum();
-	        
-	        // Save order for each cart item
-	        for (Cart cartItem : cartItems) {
-	            Orders order = new Orders();
-	            order.setBuyer(buyer);
-	            order.setProduct(cartItem.getProduct());
-	            order.setSeller(cartItem.getSeller()); // Store seller information
-	            order.setQuantity(cartItem.getQuantity());
-	            order.setShippingAddress(buyer.getStreet()+buyer.getCity()+buyer.getState()+buyer.getCountry());
-	            order.setTotalPrice(cartItem.getProduct().getPrice() * cartItem.getQuantity());
-	            order.setStatus("Processing"); // Initial status of the order
-	            orderService.saveOrder(order);
-	        }
-	        
-	        // Optionally clear the cart after order is placed
-	        cartService.clearCartForBuyer(buyer);
-	        
-
-	        
-	        model.addAttribute("orderSummary", cartItems);
-	        model.addAttribute("totalPrice", totalPrice);
-	        model.addAttribute("paymentMethod", paymentMethod);
-	        model.addAttribute("buyer", buyer);
+	    	 List<Cart> cartItems = cartService.findAllByBuyer(buyer);
+		     double totalPrice = cartItems.stream().mapToDouble(item -> item.getProduct().getPrice() * 1).sum();
+	    	Orders order=orderService.createOrder(buyer, totalPrice, buyer.getStreet());
+	    	for (Cart cartItem : cartItems) {
+	    		Product product = cartItem.getProduct();
+	    		Order_Detail orderDetails = new Order_Detail(order, product, cartItem.getQuantity(), product.getPrice(), product.getSeller(),"Placed");
+	    		orderdetailService.addOrderDetails(orderDetails);
+	    		
+	    		int updatedStock = product.getQuantity() - cartItem.getQuantity();
+	            product.setQuantity(updatedStock);
+	            productService.updateProductStock(product);
+	            
+	            cartService.removeProductFromCart(buyerId,product);
+	            model.addAttribute("orderSummary", cartItems);
+		        model.addAttribute("totalPrice", totalPrice);
+		        model.addAttribute("paymentMethod", paymentMethod);
+		        model.addAttribute("buyer", buyer);
+	    	}
+	    	
+	    	
 	    }
+
+//	    if (buyer != null) {
+//	        List<Cart> cartItems = cartService.findAllByBuyer(buyer);
+//	        double totalPrice = cartItems.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum();
+//	        
+//	        // Save order for each cart item
+//	        for (Cart cartItem : cartItems) {
+//	            Orders order = new Orders();
+//	            order.setBuyer(buyer);
+//	            order.setProduct(cartItem.getProduct());
+//	            order.setSeller(cartItem.getSeller()); // Store seller information
+//	            order.setQuantity(cartItem.getQuantity());
+//	            order.setShippingAddress(buyer.getStreet()+buyer.getCity()+buyer.getState()+buyer.getCountry());
+//	            order.setTotalPrice(cartItem.getProduct().getPrice() * cartItem.getQuantity());
+//	            order.setOrderDate(LocalDate.now());
+//	            order.setStatus("Processing"); // Initial status of the order
+//	            orderService.saveOrder(order);
+//	        }
+//	        
+//	        // Optionally clear the cart after order is placed
+//	        cartService.clearCartForBuyer(buyer);
+//	        
+//
+//	        
+//	        model.addAttribute("orderSummary", cartItems);
+//	        model.addAttribute("totalPrice", totalPrice);
+//	        model.addAttribute("paymentMethod", paymentMethod);
+//	        model.addAttribute("buyer", buyer);
+//	    }
 	    
 	    return "order-confirmation"; // Return order confirmation page
 	}
 	
+	
+    
+    
+    
     @GetMapping("/buyer/{buyerId}")
     public String getOrdersByBuyer(@PathVariable Long buyerId, Model model) {
-        List<Orders> orders = orderService.getOrdersByBuyerId(buyerId);
+        List<Orders> ordersItem = orderService.getOrdersByBuyerId(buyerId);
+        List<Order_Detail> orders = new ArrayList<>();
+        
+        // Collect all Order_Detail records associated with the buyer's orders
+        for (Orders order : ordersItem) {
+            List<Order_Detail> singleOrderDetails = orderdetailService.getOrderDetailByOrderId(order.getTransaction_id());
+            orders.addAll(singleOrderDetails); // Correct way to add lists
+        }
         model.addAttribute("orders", orders);
-        return "buyer-orders"; // The Thymeleaf template where orders will be displayed
-    } //ecom/buyer/id for all orders 
-    
+        model.addAttribute("buyerId",buyerId);
+        return "buyer-orders"; // Render the view showing buyer's orders
+    }
+
     @GetMapping("/review/add")
     public String showAddReviewForm(@RequestParam Long buyerId, @RequestParam Long productId, @RequestParam Long orderId, Model model) {
         // Add necessary attributes to the model

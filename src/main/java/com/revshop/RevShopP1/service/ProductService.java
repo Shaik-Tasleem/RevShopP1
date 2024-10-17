@@ -44,4 +44,8 @@ public class ProductService {
     public void save(Product product) {
         productRepository.save(product);
     }
+    
+    public void updateProductStock(Product product) {
+        productRepository.save(product);
+    }
 }

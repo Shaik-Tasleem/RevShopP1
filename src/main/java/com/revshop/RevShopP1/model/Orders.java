@@ -1,72 +1,60 @@
 package com.revshop.RevShopP1.model;
 
+
 import java.time.LocalDate;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "orders") // Specify the table name
 public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    @Column(name = "order_id")
+    private Long orderId; // Primary key
+    
 
-    @ManyToOne
-    @JoinColumn(name = "buyerId", nullable = false)
-    private Buyer buyer;
+    
 
-    @ManyToOne
-    @JoinColumn(name = "sellerId", nullable = false)
-    private Seller seller;
+    @ManyToOne(cascade = CascadeType.ALL) // Specify the relationship
+    @JoinColumn(name = "buyer_id", nullable = false)
+    private Buyer buyer; // Foreign key referencing Customer
 
-    @ManyToOne
-    @JoinColumn(name = "productId", nullable = false)
-    private Product product;
-
+    @Column(name = "total_amount", nullable = false)
     private double totalPrice;
+
+    @Column(name = "delivery_address", nullable = false)
     private String shippingAddress;
-    private String status;
+
+    @Column(name = "order_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDate orderDate;
-    private int Quantity;
-    public int getQuantity() {
-		return Quantity;
-	}
 
-	public void setQuantity(int quantity) {
-		Quantity = quantity;
-	}
+    // Default constructor
+    public Orders() {}
 
-	// Getters and Setters
-    public Long getOrderId() {
+    // Parameterized constructor
+    public Orders(Buyer buyer, double totalPrice, String shippingAddress) {
+        this.buyer = buyer;
+        this.totalPrice = totalPrice;
+        this.shippingAddress = shippingAddress;
+        this.orderDate = LocalDate.now(); // Set current timestamp
+    }
+
+    // Getters and Setters
+    public Long getTransaction_id() {
         return orderId;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setTransaction_id(Long transaction_id) {
+        this.orderId = transaction_id;
     }
 
     public Buyer getBuyer() {
         return buyer;
     }
-
     public void setBuyer(Buyer buyer) {
         this.buyer = buyer;
-    }
-
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
     public double getTotalPrice() {
@@ -85,14 +73,6 @@ public class Orders {
         this.shippingAddress = shippingAddress;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public LocalDate getOrderDate() {
         return orderDate;
     }
@@ -100,4 +80,6 @@ public class Orders {
     public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
+
+
 }

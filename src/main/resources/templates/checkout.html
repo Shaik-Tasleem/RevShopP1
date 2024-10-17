@@ -80,7 +80,7 @@
     <ul>
         <li th:each="item : ${cartItems}">
             <span th:text="${item.product.productName}"></span> - 
-            <span th:text="${item.quantity}"></span> x 
+            <span th:text="${item.quantity}">*</span> 
             <span th:text="${item.product.price}"></span>
             <p>Sold by: <span th:text="${item.seller.bussinessName}"></span></p> <!-- Seller information -->
         </li>

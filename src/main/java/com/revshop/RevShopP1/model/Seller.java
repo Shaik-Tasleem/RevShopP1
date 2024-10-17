@@ -21,7 +21,7 @@ public class Seller implements Serializable {
 	private List<Payments> payments = new ArrayList<>();
 
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
-	private List<Orders> orders = new ArrayList<>();
+	private List<Order_Detail> orders = new ArrayList<>();
 
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
 	private List<Cart> cart = new ArrayList<>();
@@ -56,11 +56,11 @@ public class Seller implements Serializable {
 		this.payments = payments;
 	}
 
-	public List<Orders> getOrders() {
+	public List<Order_Detail> getOrders() {
 		return orders;
 	}
 
-	public void setOrders(List<Orders> orders) {
+	public void setOrders(List<Order_Detail> orders) {
 		this.orders = orders;
 	}
 

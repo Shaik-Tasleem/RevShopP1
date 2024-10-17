@@ -156,38 +156,34 @@ header {
 	<div class="container">
 		<h2>Your Cart</h2>
 		<div th:if="${cartItems != null}">
-			<div th:each="product : ${cartItems}" class="card mb-3">
+			<div th:each="item : ${cartItems}" class="card mb-3">
 				<div class="row g-0">
 					<div class="col-md-4">
-						<img th:src="${product.image}" class="img-fluid rounded-start"
+						<img th:src="${item.image}" class="img-fluid rounded-start"
 							alt="Product Image">
 					</div>
 					<div class="col-md-8">
 						<div class="card-body">
-							<h5 class="card-title" th:text="${product.productName}">Product
+							<h5 class="card-title" th:text="${item.productName}">Product
 								Name</h5>
 							<p class="card-text">
 								<small class="text-muted">Price: $<span
-									th:text="${product.price}">Product Price</span></small>
+									th:text="${item.price}">Product Price</span></small>
 							</p>
 
-							<!-- Quantity Controls -->
-							<!-- <td>
-								Decrement Button
+							<td>
 								<button type="button" class="btn btn-secondary btn-sm"
-									th:onclick="updateQuantity([[${product.productId}]], -1)">-</button>
+									th:onclick="updateQuantity([[${item.productId}]], -1)">-</button>
 
-								Quantity Input (Readonly for direct user edit) 
 								<input
-								type="text" th:id="quantity_[[${product.productId}]]"
-								name="quantity_${product.productId}" value="1" size="3"
-								readonly> Increment Button
+								type="text" th:id="'quantity_' + ${item.productId}"
+								name="quantity_${item.productId}" value="1" size="3"
+								readonly>
 								<button type="button" class="btn btn-secondary btn-sm"
-									th:onclick="updateQuantity([[${product.productId}]], 1)">+</button>
+									th:onclick="updateQuantity([[${item.productId}]], 1)">+</button>
 							</td>
- -->
-							<!-- Button Group (Delete from Cart) -->
-							<form th:action="@{/ecom/cart/remove/{productId}(productId=${product.productId})}" method="post">
+
+							<form th:action="@{/ecom/cart/remove/{productId}(productId=${item.productId})}" method="post">
                                     <button type="submit" class="btn btn-danger">Remove</button>
                             </form>
 						</div>
@@ -200,25 +196,40 @@ header {
 			<p>Your cart is empty.</p>
 		</div>
 
-		<!-- Footer Buttons (Cancel and Buy Now) -->
 		<div class="footer-buttons">
-			<form th:action="@{/ecom/cart/cancel}" method="post">
-				<button type="submit" class="btn btn-secondary">Cancel</button>
-			</form>
+			<button type="button" class="btn btn-secondary" onclick="goBack()">Cancel</button>
 			<form th:action="@{/ecom/cart/buyNow}" method="post">
 				<button type="submit" class="btn btn-primary">Buy Now</button>
 			</form>
 		</div>
 	</div>
 	<script>
-		function updateQuantity(productId, change) {
-			var quantityInput = document.getElementById("quantity_" + productId);
-			var currentQuantity = parseInt(quantityInput.value);
-			var newQuantity = currentQuantity + change;
-			if (newQuantity < 1)
-				newQuantity = 1;
-			quantityInput.value = newQuantity;
-		}
+	function updateQuantity(productId, change) {
+	    console.log("Updating quantity for productId:", productId);  // Debug log
+
+	    // Try to fetch the input element by its dynamic ID
+	    var quantityInput = document.getElementById("quantity_" + productId);
+	    
+	    console.log(quantityInput); // Debug log to check if input is found
+
+	    if (!quantityInput) {
+	        console.error("Element with ID 'quantity_" + productId + "' not found.");
+	        return; // Stop execution if the input element is not found
+	    }
+
+	    var currentQuantity = parseInt(quantityInput.value);
+	    var newQuantity = currentQuantity + change;
+
+	    if (newQuantity < 1) {
+	        newQuantity = 1;
+	    }
+
+	    quantityInput.value = newQuantity;
+	}
+	function goBack() {
+        window.history.back();
+ // Takes the user back to the previous page in the browser's history
+    }
 	</script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
